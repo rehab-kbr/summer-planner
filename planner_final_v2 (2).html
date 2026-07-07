@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>방학 자기주도학습 플래너 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#F7F5F0;--surface:#FFF;--surface2:#F0EDE6;--border:#E2DDD6;--border2:#CCC7BE;
+  --text:#1A1814;--text2:#6B6560;--text3:#9E9890;
+  --geo:#4A3F8F;--geo-bg:#ECEAF8;--bio:#1B6B4A;--bio-bg:#E3F2EB;
+  --eng:#7A4A0D;--eng-bg:#FBF0DC;--book:#8A2A1A;--book-bg:#FBECE9;
+  --alg2:#1A5276;--alg2-bg:#D6EAF8;
+  --accent:#C4832A;--r:12px;--rl:16px;
+  --tab-h:60px;--hdr-h:56px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.55}
+
+/* ── HEADER ── */
+.hdr{background:var(--text);color:#fff;padding:12px 16px;height:var(--hdr-h);display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:200}
+.hdr-title{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.hdr-date{font-size:12px;color:rgba(255,255,255,.6);margin-top:1px}
+.hdr-streak{background:var(--accent);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+
+/* ── BOTTOM TAB NAV ── */
+.tab-nav{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.tn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-family:inherit;padding:6px 0;transition:color .15s;min-height:44px}
+.tn.on{color:var(--text)}
+.tn-icon{font-size:20px;line-height:1}
+.tn-lbl{font-size:10px;font-weight:500}
+.tn.on .tn-icon{transform:scale(1.1)}
+
+/* ── MAIN SCROLL AREA ── */
+.main{position:fixed;top:var(--hdr-h);bottom:var(--tab-h);left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page{display:none;padding:14px 14px 20px;min-height:100%}
+.page.on{display:block}
+
+/* ── SECTION TITLE ── */
+.stitle{font-size:18px;font-weight:700;margin-bottom:2px;letter-spacing:-.3px}
+.ssub{font-size:12px;color:var(--text2);margin-bottom:14px}
+
+/* ── PILLS ── */
+.pill{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;line-height:1.4}
+.pg{background:var(--geo-bg);color:var(--geo)}.pb{background:var(--bio-bg);color:var(--bio)}
+.pe{background:var(--eng-bg);color:var(--eng)}.pr{background:var(--book-bg);color:var(--book)}
+
+/* ── TODAY ── */
+.today-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:12px}
+.today-hero-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.today-date{font-size:19px;font-weight:700;letter-spacing:-.3px}
+.today-badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600}
+.bs{background:var(--bio-bg);color:var(--bio)}.br{background:var(--surface2);color:var(--text2)}
+.pbar-bg{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.pbar-fill{height:100%;background:var(--bio);border-radius:3px;transition:width .4s}
+.pbar-lbl{font-size:11px;color:var(--text2);margin-bottom:12px}
+.task-list{display:flex;flex-direction:column;gap:8px}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;transition:border-color .15s;min-height:52px}
+.task-item.done{opacity:.5}
+.task-cb{width:22px;height:22px;border:2px solid var(--border2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent}
+.task-item.done .task-cb{background:var(--bio);border-color:var(--bio);color:#fff}
+.task-body{flex:1;min-width:0}
+.task-title{font-size:14px;font-weight:500;line-height:1.4}
+.task-item.done .task-title{text-decoration:line-through}
+.task-sub{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.4}
+.task-time{font-size:12px;color:var(--text3);flex-shrink:0;padding-top:3px;font-weight:500}
+.note-lbl{font-size:11px;font-weight:600;color:var(--text2);margin:16px 0 7px;text-transform:uppercase;letter-spacing:.05em}
+.note-area{width:100%;min-height:80px;padding:12px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:inherit;color:var(--text);resize:none;outline:none}
+.note-area:focus{border-color:var(--border2)}
+.rest-msg{text-align:center;padding:50px 20px;color:var(--text2)}
+.rest-msg .big{font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px}
+
+/* ── PLANNER ── */
+.week-block{margin-bottom:20px}
+.week-lbl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.day-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:7px 5px;min-height:78px;position:relative;cursor:pointer}
+.day-card.off{background:var(--bg);opacity:.3;cursor:default;pointer-events:none}
+.day-card.today{border-color:var(--accent);border-width:2px}
+.day-card.alldone{border-color:var(--bio)}
+.day-num{font-size:13px;font-weight:600;margin-bottom:1px;text-align:center}
+.day-dow{font-size:9px;color:var(--text3);margin-bottom:4px;text-align:center}
+.day-pills{display:flex;flex-direction:column;gap:2px}
+.dp{font-size:8px;font-weight:600;padding:1px 3px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-g{background:var(--geo-bg);color:var(--geo)}.dp-b{background:var(--bio-bg);color:var(--bio)}
+.dp-e{background:var(--eng-bg);color:var(--eng)}.dp-r{background:var(--book-bg);color:var(--book)}
+.done-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--bio);display:none}
+.day-card.alldone .done-dot{display:block}
+
+/* ── SCHEDULE ── */
+.sched-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.sched-hdr{display:flex;align-items:center;gap:8px;padding:13px 14px;cursor:pointer;min-height:52px}
+.sched-date{font-size:14px;font-weight:700;min-width:42px}
+.sched-dow{font-size:12px;color:var(--text3);min-width:22px}
+.sched-ps{display:flex;gap:3px;flex-wrap:wrap;flex:1}
+.sched-t{font-size:11px;color:var(--text3);margin-left:auto;white-space:nowrap}
+.sched-arr{font-size:12px;color:var(--text3);transition:transform .2s;margin-left:4px}
+.sched-day.open .sched-arr{transform:rotate(180deg)}
+.sched-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.sched-day.open .sched-body{display:block}
+.sched-grid{display:flex;flex-direction:column;gap:6px;padding-top:10px}
+.si{padding:10px 12px;border-radius:10px}
+.si-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.si-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.si-note{font-size:12px;color:var(--text2);line-height:1.5}
+.si-g{background:var(--geo-bg)}.si-g .si-lbl{color:var(--geo)}
+.si-b{background:var(--bio-bg)}.si-b .si-lbl{color:var(--bio)}
+.si-e{background:var(--eng-bg)}.si-e .si-lbl{color:var(--eng)}
+.si-r{background:var(--book-bg)}.si-r .si-lbl{color:var(--book)}
+.yt-link{font-size:12px;color:var(--geo);text-decoration:none;display:block;margin-top:4px;padding:4px 0}
+.yt-link:hover{text-decoration:underline}
+
+/* ── PROGRESS ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.stat-num{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.stat-lbl{font-size:11px;color:var(--text2);margin-top:2px}
+.subj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:10px}
+.subj-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.bar-bg{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.ch-grid{display:flex;flex-wrap:wrap;gap:6px}
+.ch-tag{font-size:12px;padding:5px 11px;border-radius:20px;border:1.5px solid var(--border);color:var(--text2);cursor:pointer;background:var(--bg);min-height:34px;display:flex;align-items:center}
+.ch-tag.done{border-color:transparent}
+.geo-d{background:var(--geo-bg);color:var(--geo)}.bio-d{background:var(--bio-bg);color:var(--bio)}
+.eng-d{background:var(--eng-bg);color:var(--eng)}.book-d{background:var(--book-bg);color:var(--book)}
+.alg2-d{background:var(--alg2-bg);color:var(--alg2)}
+
+/* ══ TIMETABLE ══ */
+.tt-outer{display:flex;flex-direction:column;gap:12px}
+.tt-pool{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:12px}
+.tt-pool h4{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tt-sep-line{height:1px;background:var(--border);margin:10px 0}
+.tt-cards-row{display:flex;flex-wrap:wrap;gap:6px}
+.tt-card{padding:8px 12px;border-radius:10px;cursor:grab;border:1.5px solid rgba(0,0,0,.08);user-select:none;font-size:12px;font-weight:600;min-height:36px;display:flex;align-items:center;white-space:nowrap}
+.tt-card:active{cursor:grabbing;opacity:.7}
+.tt-placed{opacity:.3;cursor:not-allowed;pointer-events:none}
+.tt-ghost{opacity:.3}
+.tt-card-name{font-size:12px;font-weight:600}
+.tt-card-meta{display:none}
+.tt-right{flex:1}
+.tt-gbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.tt-ghdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+.tt-ghdr-title{font-size:14px;font-weight:700}
+.tt-ghdr-ctrl{display:flex;align-items:center;gap:8px}
+.tt-ghdr select,.tt-ghdr button{font-size:13px;padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;cursor:pointer;min-height:36px}
+.tt-grid{display:flex;position:relative}
+.tt-tcol{width:42px;flex-shrink:0;border-right:1px solid var(--border)}
+.tt-tcell{height:36px;font-size:10px;color:var(--text3);display:flex;align-items:flex-start;justify-content:flex-end;padding:3px 5px 0 0;border-bottom:.5px solid var(--border)}
+.tt-tcell.tt-hr{border-bottom-color:var(--border2)}
+.tt-scol{flex:1;position:relative;display:flex;flex-direction:column}
+.tt-slot{height:36px;border-bottom:.5px solid var(--border)}
+.tt-slot.tt-sh{border-bottom-color:var(--border2)}
+.tt-slot.tt-over{background:rgba(26,107,74,.1)}
+.tt-cv{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+.tt-block{position:absolute;left:3px;right:3px;border-radius:8px;padding:5px 26px 12px 20px;pointer-events:all;border:1.5px solid rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.1);overflow:hidden}
+.tt-bname{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-btime{font-size:11px;opacity:.7;margin-top:1px}
+.tt-del{position:absolute;top:4px;right:6px;background:none;border:none;font-size:16px;opacity:.4;cursor:pointer;color:inherit;padding:2px;line-height:1;min-width:28px;min-height:28px;display:flex;align-items:center;justify-content:center}
+.tt-del:hover{opacity:1}
+.tt-done-btn{position:absolute;top:4px;left:5px;background:none;border:none;font-size:13px;font-weight:700;opacity:.5;cursor:pointer;color:inherit;padding:2px;min-width:28px;min-height:28px;display:flex;align-items:center;justify-content:center}
+.tt-done-btn:hover{opacity:1}
+.tt-block.tt-done{opacity:.55}
+.tt-block.tt-done .tt-bname{text-decoration:line-through;opacity:.7}
+.tt-block.tt-done .tt-done-btn{opacity:.9}
+.tt-rsz{position:absolute;bottom:0;left:0;right:0;height:14px;cursor:ns-resize;display:flex;align-items:center;justify-content:center;font-size:10px;opacity:.4;user-select:none}
+.tt-rsz:hover{opacity:.9}
+.tt-summ{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--surface2);border-top:1px solid var(--border);font-size:12px;align-items:center;min-height:40px}
+
+/* ── CARRY-OVER ── */
+.co-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:12px}
+.co-panel h3{font-size:14px;font-weight:700;margin-bottom:3px}
+.co-panel p{font-size:12px;color:var(--text2);margin-bottom:10px}
+.co-input-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.co-subj-sel{font-size:14px;padding:10px 10px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;color:var(--text);background:var(--bg);min-height:44px}
+.co-input{flex:1;min-width:120px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;min-height:44px}
+.co-input:focus{border-color:var(--border2)}
+.co-add-btn{padding:10px 16px;background:var(--text);color:#fff;border:none;border-radius:10px;font-size:14px;font-family:inherit;cursor:pointer;white-space:nowrap;min-height:44px}
+.co-items{display:flex;flex-direction:column;gap:6px;min-height:40px}
+.co-item{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:10px;border:1.5px solid rgba(0,0,0,.07);cursor:grab;user-select:none;min-height:46px}
+.co-item-text{flex:1;font-size:13px;font-weight:600}
+.co-del{background:none;border:none;font-size:18px;opacity:.35;cursor:pointer;color:inherit;padding:4px;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center}
+.co-del:hover{opacity:.8}
+.co-empty{font-size:13px;color:var(--text3);text-align:center;padding:16px 0}
+.co-done-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:var(--surface2);margin-bottom:6px;min-height:44px}
+.co-done-item-text{flex:1;font-size:13px;text-decoration:line-through;color:var(--text2)}
+.co-done-tag{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600}
+
+/* ── WEEKLY BADGE ── */
+.week-badge{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;margin-bottom:10px}
+.week-badge-icon{font-size:24px;line-height:1}
+.week-badge-info{flex:1}
+.week-badge-title{font-size:13px;font-weight:700;color:var(--text)}
+.week-badge-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.week-badge-pct{font-size:18px;font-weight:700;color:var(--accent)}
+.week-badge.gold{border-color:#F4C430;background:#FFFBEC}
+.week-badge.silver{border-color:#B0B0B0;background:#F8F8F8}
+
+/* ── TOTAL HOURS ── */
+.total-hours{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;font-weight:500}
+
+/* ── CHAPTER COMPLETE TOAST ── */
+.ch-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);background:#1A1814;color:#fff;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:600;z-index:500;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.ch-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── MOM COMMENT ── */
+.mom-comment-wrap{margin-top:14px;background:linear-gradient(135deg,#FBF0DC,#FFF8F0);border:1.5px solid #F5C97A;border-radius:var(--rl);padding:14px 16px}
+.mom-comment-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.mom-comment-title{font-size:12px;font-weight:700;color:#7A4A0D;display:flex;align-items:center;gap:5px}
+.mom-comment-time{font-size:10px;color:#9E9890}
+.mom-comment-text{font-size:14px;line-height:1.6;color:var(--text);white-space:pre-wrap}
+.mom-comment-empty{font-size:13px;color:var(--text3);font-style:italic}
+.mom-edit-wrap{margin-top:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rl);padding:14px}
+.mom-edit-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.mom-textarea{width:100%;min-height:80px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);resize:none;outline:none;background:var(--bg)}
+.mom-textarea:focus{border-color:var(--border2)}
+.mom-save-btn{margin-top:8px;padding:10px 18px;background:var(--text);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;width:100%;min-height:44px}
+.mom-save-btn:active{opacity:.8}
+
+/* ── CONFETTI ANIMATION ── */
+@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100px) rotate(360deg);opacity:0}}
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:600;animation:confetti-fall .8s ease-out forwards}
+
+/* ── PROGRESS STATS HEADER ── */
+.prog-hero{background:linear-gradient(135deg,var(--text),#3A3630);color:#fff;border-radius:var(--rl);padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
+.prog-hero::after{content:'🎯';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.15}
+.prog-total-h{font-size:13px;opacity:.7;margin-bottom:4px}
+.prog-total-n{font-size:32px;font-weight:700;letter-spacing:-1px}
+.prog-total-sub{font-size:11px;opacity:.6;margin-top:2px}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+(function(){
+  try {
+    firebase.initializeApp({
+      databaseURL:'https://summer-planner-2026-default-rtdb.asia-southeast1.firebasedatabase.app'
+    });
+    window._db = firebase.database();
+    window._fbReady = true;
+  } catch(e) {
+    console.warn('Firebase init error:', e);
+    window._fbReady = false;
+  }
+})();
+</script>
+</head>
+<body>
+
+<div class="ch-toast" id="ch-toast"></div>
+<div class="hdr">
+  <div>
+    <div class="hdr-title">🎯 방학 자기주도학습 플래너</div>
+    <div class="hdr-date" id="hdr-date"></div>
+    <div class="total-hours" id="hdr-hours"></div>
+  </div>
+  <div class="hdr-streak" id="hdr-streak"></div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tn on"  onclick="go('today')"><span class="tn-icon">✅</span><span class="tn-lbl">오늘</span></button>
+  <button class="tn"     onclick="go('plan')"><span class="tn-icon">📅</span><span class="tn-lbl">달력</span></button>
+  <button class="tn"     onclick="go('sched')"><span class="tn-icon">📋</span><span class="tn-lbl">일정표</span></button>
+  <button class="tn"     onclick="go('prog')"><span class="tn-icon">📊</span><span class="tn-lbl">진도</span></button>
+  <button class="tn"     onclick="go('tt')"><span class="tn-icon">⏱</span><span class="tn-lbl">타임</span></button>
+  <button class="tn"     onclick="go('co')"><span class="tn-icon">📝</span><span class="tn-lbl">넘기기</span></button>
+</nav>
+
+<div class="main" id="main-scroll">
+
+<!-- TODAY -->
+<div id="tab-today" class="page on">
+  <div id="week-badge-wrap"></div>
+  <div class="today-hero">
+    <div>
+      <div class="today-date" id="td-date"></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:2px" id="td-week"></div>
+    </div>
+    <span class="today-badge" id="td-badge"></span>
+  </div>
+  <div id="td-pbar" style="display:none">
+    <div class="pbar-wrap"><div class="pbar-bg"><div class="pbar-fill" id="td-fill" style="width:0%"></div></div></div>
+    <div class="pbar-lbl" id="td-plbl"></div>
+  </div>
+  <div id="td-tasks"></div>
+  <div class="note-lbl">오늘의 메모</div>
+  <textarea class="note-area" id="td-note" placeholder="오늘 배운 것, 어려운 점..."></textarea>
+
+  <!-- 엄마 코멘트 (읽기) -->
+  <div class="mom-comment-wrap" id="mom-comment-view" style="display:none">
+    <div class="mom-comment-header">
+      <div class="mom-comment-title">💌 엄마 코멘트</div>
+      <div class="mom-comment-time" id="mom-comment-time"></div>
+    </div>
+    <div class="mom-comment-text" id="mom-comment-text"></div>
+  </div>
+
+  <!-- 엄마 코멘트 (쓰기) — PC에서 보일 때만 표시 -->
+  <div class="mom-edit-wrap" id="mom-edit-wrap">
+    <div class="mom-edit-title">✏️ 엄마 코멘트 남기기</div>
+    <textarea class="mom-textarea" id="mom-textarea" placeholder="오늘 수고했어! 내일도 화이팅 😊&#10;어떤 부분이 어려웠는지 이야기해줘..."></textarea>
+    <button class="mom-save-btn" onclick="saveMomComment()">💌 저장하기</button>
+  </div>
+</div>
+
+<!-- PLANNER -->
+<div id="tab-plan" class="page">
+  <div class="stitle">달력 플래너</div>
+  <div class="ssub">학습일을 클릭하면 오늘 할 일 탭으로 이동해요</div>
+  <div id="plan-body"></div>
+</div>
+
+<!-- SCHEDULE -->
+<div id="tab-sched" class="page">
+  <div class="stitle">전체 일정표</div>
+  <div class="ssub">날짜 클릭으로 펼치기</div>
+  <div id="sched-body"></div>
+</div>
+
+<!-- PROGRESS -->
+<div id="tab-prog" class="page">
+  <div class="prog-hero">
+    <div class="prog-total-h">지금까지 총 순공시간</div>
+    <div class="prog-total-n" id="prog-total-h">0시간</div>
+    <div class="prog-total-sub" id="prog-total-sub">방학 목표를 향해 달려가는 중!</div>
+  </div>
+  <div class="stat-grid" id="stat-grid"></div>
+  <div id="prog-body"></div>
+</div>
+
+<!-- TIMETABLE -->
+<div id="tab-tt" class="page">
+  <div class="stitle">⏱ 타임테이블</div>
+  <div class="ssub">왼쪽 카드를 드래그 · 하단 ⠿ 핸들로 시간 조정 · ✕로 삭제</div>
+  <div class="tt-outer">
+    <div class="tt-pool">
+      <h4>오늘의 과제</h4>
+      <div id="tt-tasks"></div>
+      <div class="tt-sep-line"></div>
+      <h4>기타</h4>
+      <div id="tt-extra"></div>
+    </div>
+    <div class="tt-right">
+      <div class="tt-gbox">
+        <div class="tt-ghdr">
+          <span class="tt-ghdr-title" id="tt-title">타임테이블</span>
+          <div class="tt-ghdr-ctrl">
+            <span style="font-size:11px;color:var(--text2)">시작</span>
+            <select id="tt-start" onchange="ttRebuild()">
+              <option value="6">06:00</option>
+              <option value="7" selected>07:00</option>
+              <option value="8">08:00</option>
+              <option value="9">09:00</option>
+            </select>
+            <button onclick="ttClear()">초기화</button>
+          </div>
+        </div>
+        <div class="tt-grid" id="tt-grid">
+          <div class="tt-tcol" id="tt-tcol"></div>
+          <div class="tt-scol" id="tt-scol">
+            <div class="tt-canvas" id="tt-canvas"></div>
+          </div>
+        </div>
+        <div class="tt-summ" id="tt-summ"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CARRY-OVER -->
+<div id="tab-co" class="page">
+  <div class="stitle">📋 넘기기</div>
+  <div class="ssub">다 하지 못한 과제를 기록하고, 타임테이블로 드래그해서 배치하세요</div>
+  <div>
+    <div class="co-panel">
+      <h3>📝 못 한 과제 추가</h3>
+      <p>과목 선택 후 내용을 입력하고 추가하세요</p>
+      <div class="co-input-row">
+        <select class="co-subj-sel" id="co-subj">
+          <option value="geo">Geometry</option>
+          <option value="bio">Biology</option>
+          <option value="eng">Grammar</option>
+          <option value="alg2">Algebra 2</option>
+          <option value="book">Book</option>
+          <option value="etc">기타</option>
+        </select>
+        <input class="co-input" id="co-text" placeholder="못 한 과제 내용 입력..." />
+        <button class="co-add-btn" onclick="coAdd()">추가</button>
+      </div>
+      <div id="co-items" class="co-items"></div>
+    </div>
+    <div class="co-panel">
+      <h3>✅ 완료된 과제</h3>
+      <p>타임테이블에서 완료 표시한 과제들이 여기 기록돼요</p>
+      <div id="co-done-list" class="co-done-list"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const DAYS_KO=['일','월','화','수','목','금','토'];
+const DAYS_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const STUDY_DATES=['2026-07-09','2026-07-10','2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17','2026-07-20','2026-07-21','2026-07-22','2026-07-23','2026-07-24','2026-07-29','2026-07-30','2026-07-31','2026-08-01','2026-08-03','2026-08-04','2026-08-05','2026-08-06','2026-08-07'];
+
+const SCHEDULE={
+  '2026-07-09':{geo:{chapter:'Ch.6 Similarities',tasks:['1강 Similar polygons + 2강 Constructing similar polygons','개념 학습 + Khan Academy 보충']},bio:{chapter:'Ch.17 The Tree of Life',videos:[{title:'★ Amoeba Sisters — Classification (~9분)',url:'https://www.youtube.com/watch?v=DVouQRAKxYo'}],note:'용어: taxonomy, domain, kingdom, binomial nomenclature, phylogeny'},eng:{sec:'2',title:'Present & Past Tenses (Simple/Continuous)',note:'2: Present Simple vs Continuous, Past Simple vs Continuous, Tricky Irregular Verbs + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'1.1',title:'Law of Exponents',chapter:'Ch.1 Polynomials and Exponents',note:'1.1 강의(34분)+Review Exercise(22분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-10':{geo:{chapter:'Ch.6 Similarities',tasks:['3강 Similar triangles theorems','DeltaMath: Similar Figures, Similar Triangles AA/SAS/SSS']},bio:{chapter:'Ch.17 The Tree of Life',videos:[{title:'★ Amoeba Sisters — Natural Selection (~9분)',url:'https://www.youtube.com/watch?v=7VM9YxmULuo'}],note:'용어: taxonomy, domain, kingdom, binomial nomenclature, phylogeny'},eng:{sec:'3',title:'Present Tense in All Aspects',note:'3: Present Perfect vs Past Simple, DO/IS DOING/HAS DONE/HAS BEEN DOING 강의 4개 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'1.2',title:'Calculating Monomials',chapter:'Ch.1 Polynomials and Exponents',note:'1.2 강의(15분)+Review Exercise(13분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-13':{geo:{chapter:'Ch.6 Similarities',tasks:['4강 Triangle proportionality theorem','DeltaMath 심화 + 오답정리']},bio:{chapter:'Ch.18 Viruses & Prokaryotes',videos:[{title:'★ Amoeba Sisters — Viruses Updated (~10분)',url:'https://www.youtube.com/watch?v=8FqlTslU22s'}],note:'용어: virus, bacterium, prokaryote, host cell, lytic/lysogenic cycle'},eng:{sec:'4+5',title:'Past & Future Tenses (All Aspects)',note:'4: Past all aspects 2강 + 5: WILL/GOING TO, Future aspects, Signal words 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'1.3',title:'Calculating Polynomials: Addition and Subtraction',chapter:'Ch.1 Polynomials and Exponents',note:'1.3 강의(25분)+Review Exercise(24분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-14':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['1강 Pythagorean theorem definition + 2강 formula & examples','DeltaMath: Pythagorean Theorem']},bio:{chapter:'Ch.18 Viruses & Prokaryotes',videos:[{title:'★ Amoeba Sisters — Bacteria Updated (~9분)',url:'https://www.youtube.com/watch?v=ORB866QSGv8'}],note:'용어: virus, bacterium, prokaryote, host cell, lytic/lysogenic cycle'},eng:{sec:'6',title:'Questions',note:'6: How to Form Questions, Subject/Object Q, Indirect Q, Auxiliary Verbs 4강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'1.4',title:'Calculating Polynomials: Multiplication Part 1',chapter:'Ch.1 Polynomials and Exponents',note:'1.4 강의(37분)+Review Exercise(20분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-15':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['3강 Converse of Pythagorean + 4강 Geometric mean + 5강 Right triangle properties','DeltaMath: 특수직각삼각형 기초']},bio:{chapter:'Ch.3 Cell Structure & Function',videos:[{title:'★ Amoeba Sisters — Introduction to Cells: Grand Cell Tour (~10분)',url:'https://www.youtube.com/watch?v=8IlzKri08kk'}],note:'용어: organelle, nucleus, mitochondria, ribosome, ER, Golgi apparatus'},eng:{sec:'7+8a',title:'Reported Speech + Passive Forms',note:'7: Reported Speech + 8: Passive/Active, Causative 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'1.5',title:'Calculating Polynomials: Multiplication Part 2',chapter:'Ch.1 Polynomials and Exponents',note:'1.5 강의(27분)+Review Exercise(17분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-16':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['6강 Special right triangles (30-60-90, 45-45-90)','DeltaMath: Special Right Triangles 집중']},bio:{chapter:'Ch.3 Cell Structure & Function',videos:[{title:'★ Amoeba Sisters — Inside the Cell Membrane (~9분)',url:'https://www.youtube.com/watch?v=qBCVVszQQNs'}],note:'용어: organelle, nucleus, mitochondria, ribosome, ER, Golgi apparatus'},eng:{sec:'8b',title:'Passive Complex + Ergative Verbs',note:'8: Passive complex, Ergative Verbs 1-2 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'2.1',title:'Factoring Binomials',chapter:'Ch.2 Factoring',note:'2.1 강의(18분)+Review Exercise(28분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-17':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['7강 Trigonometric ratio definition + 8강 Practice finding trig ratios','DeltaMath: Trigonometric Ratios']},bio:{chapter:'Ch.3 Cell Structure & Function',videos:[{title:'★ Amoeba Sisters — Cell Transport (~8분)',url:'https://www.youtube.com/watch?v=Ptmlvtei8hw'}],note:'용어: organelle, nucleus, mitochondria, ribosome, ER, Golgi apparatus'},eng:{sec:'9a',title:'Modal Verbs — Speculation/Obligation',note:'9: Modal Verbs of Speculation, Obligation, Neednt have done 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'2.2',title:'Factoring Trinomials',chapter:'Ch.2 Factoring',note:'2.2 강의(30분)+Review Exercise(21분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-20':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['9강 Law of sines formula & examples','DeltaMath: Solving Right Triangles 심화']},bio:{chapter:'Ch.4 Cells & Energy',videos:[{title:'★ Amoeba Sisters — What is ATP? (~6분)',url:'https://www.youtube.com/watch?v=23ZzI6WZS28'}],note:'용어: ATP, ADP, cellular respiration, photosynthesis, chlorophyll, diffusion, osmosis'},eng:{sec:'9b',title:'Modal Verbs — Should & Would',note:'9: Should (various functions), Would (various functions) 2강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'2.3',title:'Factoring by Grouping and Substitution',chapter:'Ch.2 Factoring',note:'2.3 강의(22분)+Review Exercise(28분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-21':{geo:{chapter:'Ch.7 Right Triangles and Trigonometry',tasks:['Ch.7 전체 오답정리 + 핵심공식 정리','DeltaMath 심화문제 + 개념 노트 완성']},bio:{chapter:'Ch.4 Cells & Energy',videos:[{title:'★ Amoeba Sisters — Cellular Respiration UPDATED (~12분)',url:'https://www.youtube.com/watch?v=eJ9Zjc-jdys'}],note:'용어: ATP, ADP, cellular respiration, photosynthesis, chlorophyll, diffusion, osmosis'},eng:{sec:'10',title:'Conditionals — All Types',note:'10: Zero/1st/2nd/3rd, Mixed and Pseudo, False Conditionals 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'3.1',title:'Introduction to Rational Expressions',chapter:'Ch.3 Rational Expressions',note:'3.1 강의(19분)+Review Exercise(27분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-22':{geo:{chapter:'Ch.8 Quadrilaterals',tasks:['1강 Diagonals of polygon + 2강 Angles in polygon + 3강 Parallelograms','DeltaMath: Properties of Parallelograms']},bio:{chapter:'Ch.5 Cell Growth & Division',videos:[{title:'★ Amoeba Sisters — The Cell Cycle Updated (~9분)',url:'https://www.youtube.com/watch?v=QVCjdNxJreE'}],note:'용어: cell cycle, mitosis, meiosis, chromosome, chromatid, cytokinesis'},eng:{sec:'11',title:'Subjunctive & Inversion',note:'11: Subjunctive, Subjunctive and Conjunctions, Inversion 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'3.2',title:'Addition Subtraction and Complex Fraction',chapter:'Ch.3 Rational Expressions',note:'3.2 강의(26분)+Review Exercise(41분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-23':{geo:{chapter:'Ch.8 Quadrilaterals',tasks:['4강 Rhombus + 5강 Rectangles + 6강 Square','DeltaMath: Special Quadrilaterals']},bio:{chapter:'Ch.5 Cell Growth & Division',videos:[{title:'★ Amoeba Sisters — Mitosis Updated (~10분)',url:'https://www.youtube.com/watch?v=f-ldPgEfAHI'}],note:'용어: cell cycle, mitosis, meiosis, chromosome, chromatid, cytokinesis'},eng:{sec:'12a',title:'Gerunds & Infinitives (Simple + Complex)',note:'12: Gerunds/Infinitives simple, complex forms, Complex to+infinitive 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'3.3',title:'Rational Equations',chapter:'Ch.3 Rational Expressions',note:'3.3 강의(16분)+Review Exercise(31분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-24':{geo:{chapter:'Ch.8 Quadrilaterals',tasks:['7강 Trapezoid + 8강 Kite in geometry','DeltaMath: Trapezoids and Kites']},bio:{chapter:'Ch.6 Meiosis & Mendel',videos:[{title:'★ Amoeba Sisters — Meiosis Updated (~12분)',url:'https://www.youtube.com/watch?v=VzDMG7ke69g'}],note:'용어: meiosis, gamete, haploid, diploid, allele, dominant, recessive, Punnett square'},eng:{sec:'12b',title:'Infinitives + Participles + to+-ing',note:'12: Noun+to+inf, Participles, To+-ing 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'3.4',title:'Application of Rational Equations',chapter:'Ch.3 Rational Expressions',note:'3.4 강의(27분)+Review Exercise(23분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-29':{geo:{chapter:'Ch.8 Quadrilaterals',tasks:['Ch.8 전체 오답정리','DeltaMath: Identify Quadrilaterals from Coordinates']},bio:{chapter:'Ch.6 Meiosis & Mendel',videos:[{title:'★ Amoeba Sisters — Monohybrid Crosses and Punnett Square (~10분)',url:'https://www.youtube.com/watch?v=i-0rSv6oxSY'}],note:'용어: meiosis, gamete, haploid, diploid, allele, dominant, recessive, Punnett square'},eng:{sec:'13+14',title:'Reporting Verbs + Relative Clauses',note:'13: Reporting Verbs 2강 + 14: Relative Clauses, Preposition+Relative Clause 1-2 4강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'4.1',title:'Solving Basic Quadratic Equations',chapter:'Ch.4 Quadratic Equations',note:'4.1 강의(20분)+Review Exercise(15분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-30':{geo:{chapter:'Ch.10 Properties of Circles',tasks:['1강 Circle definition & parts + 2강 Tangent of circle + 3강 Measure of arc','DeltaMath: Arc Length and Sector Area']},bio:{chapter:'Ch.7 Extending Mendelian Genetics',videos:[{title:'★ Amoeba Sisters — Dihybrid and Two-Trait Crosses (~10분)',url:'https://www.youtube.com/watch?v=qIGXTJLrLf8'}],note:'용어: codominance, incomplete dominance, sex-linked, dihybrid cross, multiple alleles'},eng:{sec:'15+16a',title:'Adjectives + Articles 입문',note:'15: Gradable adj, Comparisons 2강 + 16: Determiners, Articles summary 2강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'4.2',title:'Complex Number',chapter:'Ch.4 Quadratic Equations',note:'4.2 강의(32분)+Review Exercise(23분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-07-31':{geo:{chapter:'Ch.10 Properties of Circles',tasks:['4강 Central & inscribed angles + 5강 How to find inscribed angle','DeltaMath: Inscribed Angles']},bio:{chapter:'Ch.7 Extending Mendelian Genetics',videos:[{title:'★ Amoeba Sisters — Multiple Alleles: ABO Blood Types (~8분)',url:'https://www.youtube.com/watch?v=9O5JQqlngFY'}],note:'용어: codominance, incomplete dominance, sex-linked, dihybrid cross, multiple alleles'},eng:{sec:'16b',title:'Articles 심화',note:'16: Determiners order, Articles Lesson 2-5 핵심 선택 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'4.3',title:'Completing the Square and the Quadratic Formula',chapter:'Ch.4 Quadratic Equations',note:'4.3 강의(15분)+Review Exercise(25분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-01':{geo:{chapter:'Ch.10 Properties of Circles',tasks:['6강 Inscribed & circumscribed figures + 7강 Angles involving tangents/chords/secants','DeltaMath: Tangent Lines, Chord/Secant angles']},bio:{chapter:'Ch.7 Extending Mendelian Genetics',videos:[{title:'★ Amoeba Sisters — Punnett Squares and Sex-Linked Traits UPDATED (~10분)',url:'https://www.youtube.com/watch?v=dN9SZHO6Wjg'}],note:'용어: codominance, incomplete dominance, sex-linked, dihybrid cross, multiple alleles'},eng:{sec:'17a',title:'Confusing Vocabulary Part 1',note:'17: used to/be used to, IT vs THERE, SO vs SUCH, AS vs LIKE 4강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:false,alg2:{sec:'4.4',title:'More Complicated Quadratic Equations',chapter:'Ch.4 Quadratic Equations',note:'4.4 강의(8분)+Review Exercise(9분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-03':{geo:{chapter:'Ch.10 Properties of Circles',tasks:['8강 Lengths involving tangents/chords/secants + 9강 How to graph a circle','DeltaMath: Chord/Secant/Tangent lengths']},bio:{chapter:'Ch.7 Extending Mendelian Genetics',videos:[{title:'★ Amoeba Sisters — Dihybrid and Two-Trait Crosses (~10분)',url:'https://www.youtube.com/watch?v=qIGXTJLrLf8'}],note:'용어: codominance, incomplete dominance, sex-linked, dihybrid cross, multiple alleles'},eng:{sec:'17b',title:'Confusing Vocabulary Part 2',note:'17: SAY/SPEAK/TALK/TELL, WHO-WHOM-WHOSE, BEFORE-UNTIL, Random Words 1-2-3 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'4.5',title:'Solutions and Coefficients of the Quadratic Equations',chapter:'Ch.4 Quadratic Equations',note:'4.5 강의(28분)+Review Exercise(18분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-04':{geo:{chapter:'Ch.10 Properties of Circles',tasks:['Ch.10 전체 오답정리','DeltaMath 심화: Angles & Lengths formed by Chords/Secants/Tangents']},bio:{chapter:'Ch.7 Extending Mendelian Genetics',videos:[{title:'★ Amoeba Sisters — Multiple Alleles: ABO Blood Types (~8분)',url:'https://www.youtube.com/watch?v=9O5JQqlngFY'}],note:'용어: codominance, incomplete dominance, sex-linked, dihybrid cross, multiple alleles'},eng:{sec:'18+19a',title:'Ellipsis + Linking Words 입문',note:'18: Ellipsis, Reduced Clauses 2강 + 19: Concession/Contrast, Cause/Effect 2강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'4.6',title:'Word Problems',chapter:'Ch.4 Quadratic Equations',note:'4.6 강의(17분)+Review Exercise(25분)',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-05':{geo:{chapter:'Ch.11 Measurements of Figures and Solids',tasks:['1강 Arc length + 2강 Circumference + 3강 Radians to degrees + 4강 Area & circumference + 5강 Area of regular polygon','DeltaMath: Area of Regular Polygons, Circumference and Area of Circles']},bio:{chapter:'Ch.8 From DNA to Proteins',videos:[{title:'★ Amoeba Sisters — DNA Replication Updated (~8분)',url:'https://www.youtube.com/watch?v=Qqe4thU-os8'}],note:'용어: DNA, RNA, transcription, translation, codon, amino acid, mRNA, tRNA'},eng:{sec:'19b+20',title:'Linking Words 심화 + Conjunctions',note:'19: Condition/Sequence, despite/although, while/whereas 3강 + 20: Conjunctions, Parallelism 4강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'Rev1',title:'Ch.1~2 단원 복습',chapter:'Ch.1~2 Review',note:'Ch.1 and Ch.2 오답 정리+핵심 개념 복습',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-06':{geo:{chapter:'Ch.11 Measurements of Figures and Solids',tasks:['6강 Platonic solids + 7강 Prisms + 8강 Cylinder + 9강 Volume prisms & pyramids + 10강 Cylinders/cones + 11강 Sphere','DeltaMath: Volume of Prisms, Cylinders, Surface Area']},bio:{chapter:'Ch.8 From DNA to Proteins',videos:[{title:'★ Amoeba Sisters — DNA vs RNA Updated (~7분)',url:'https://www.youtube.com/watch?v=JQByjprj_mA'}],note:'용어: DNA, RNA, transcription, translation, codon, amino acid, mRNA, tRNA'},eng:{sec:'21',title:'Adverbs',note:'21: Position of adverbs, Flat Adverbs, Adverb Collocations 1-2-3 5강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'Rev2',title:'Ch.3 단원 복습',chapter:'Ch.3 Review',note:'Ch.3 Rational Expressions 오답 정리+핵심 개념 복습',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+  '2026-08-07':{geo:{chapter:'Ch.11 Measurements of Figures and Solids',tasks:['Ch.11 전체 오답정리 + Geometry 전체 핵심 총복습','DeltaMath 심화 + 오답노트 완성']},bio:{chapter:'Ch.8 From DNA to Proteins',videos:[{title:'★ Amoeba Sisters — Protein Synthesis Updated (~10분)',url:'https://www.youtube.com/watch?v=oefAI2x2CQM'}],note:'용어: DNA, RNA, transcription, translation, codon, amino acid, mRNA, tRNA'},eng:{sec:'22+23',title:'Prepositions + Cleft Sentences + Fronting',note:'22: Noun/Adj/Verb+Prep, Advanced Prep 7강 + 23: Cleft Sentences, Fronting 1-2 3강 + 연습문제',url:'https://www.udemy.com/course/english-grammar-advanced/'},book:true,alg2:{sec:'Rev3',title:'Ch.4 단원 복습',chapter:'Ch.4 Review',note:'Ch.4 Quadratic Equations 오답 정리+최종 정리',url:'https://www.jmeducation.net/course/course_view.jsp?id=24371'}},
+};
+const WEEKS=[
+  {label:'Week Jul 6 ~ Jul 10',days:['2026-07-09','2026-07-10'],startDow:3},
+  {label:'Week Jul 13 ~ Jul 17',days:['2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17'],startDow:0},
+  {label:'Week Jul 20 ~ Jul 24',days:['2026-07-20','2026-07-21','2026-07-22','2026-07-23','2026-07-24'],startDow:0},
+  {label:'Week Jul 27 ~ Aug 1',days:['2026-07-29','2026-07-30','2026-07-31','2026-08-01'],startDow:2},
+  {label:'Week Aug 3 ~ Aug 7',days:['2026-08-03','2026-08-04','2026-08-05','2026-08-06','2026-08-07'],startDow:0},
+];
+
+const DAY_TIMES={
+  '2026-07-09':{geo:90,bio:20,eng:95,book:120,alg2:60,total:385},
+  '2026-07-10':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-13':{geo:80,bio:20,eng:95,book:120,alg2:60,total:375},
+  '2026-07-14':{geo:90,bio:20,eng:95,book:120,alg2:60,total:385},
+  '2026-07-15':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-16':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-17':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-20':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-21':{geo:80,bio:20,eng:95,book:120,alg2:60,total:375},
+  '2026-07-22':{geo:90,bio:20,eng:95,book:120,alg2:60,total:385},
+  '2026-07-23':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-24':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-07-29':{geo:80,bio:20,eng:95,book:120,alg2:60,total:375},
+  '2026-07-30':{geo:90,bio:20,eng:95,book:120,alg2:60,total:385},
+  '2026-07-31':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-08-01':{geo:75,bio:20,eng:95,book:0,alg2:60,total:250},
+  '2026-08-03':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-08-04':{geo:80,bio:20,eng:95,book:120,alg2:60,total:375},
+  '2026-08-05':{geo:90,bio:20,eng:95,book:120,alg2:60,total:385},
+  '2026-08-06':{geo:75,bio:20,eng:95,book:120,alg2:60,total:370},
+  '2026-08-07':{geo:80,bio:20,eng:95,book:120,alg2:60,total:375},
+};
+const GEO_LINKS_BY_CHAPTER={
+  'Ch.6 Similarities':{
+    concept:[{icon:'🔵',site:'Study.com',title:'Ch.6 Similarities 기본 개념',url:'https://study.com/academy/course/holt-mcdougal-larson-geometry-online-textbook-help.html'},{icon:'🟣',site:'Khan Academy',title:'Ch.6 Similarities 단원',url:'https://www.khanacademy.org/math/geometry/hs-geo-similarity'}],
+    practice:[{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Similar Figures',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Similar Triangles (AA/SAS/SSS)',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Proportionality Theorems',url:'https://www.deltamath.com/app/learner'}],
+    visual:[{icon:'🟢',site:'GeoGebra',title:'Ch.6 Similarities 시각화',url:'https://www.geogebra.org/m/ZSbYubAa'}]},
+  'Ch.7 Right Triangles and Trigonometry':{
+    concept:[{icon:'🔵',site:'Study.com',title:'Ch.7 Right Triangles and Trigonometry 기본 개념',url:'https://study.com/academy/course/holt-mcdougal-larson-geometry-online-textbook-help.html'},{icon:'🟣',site:'Khan Academy',title:'Ch.7 Right Triangles and Trigonometry 단원',url:'https://www.khanacademy.org/math/geometry/hs-geo-trig'}],
+    practice:[{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Pythagorean Theorem',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Trigonometric Ratios',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Solving Right Triangles',url:'https://www.deltamath.com/app/learner'}],
+    visual:[{icon:'🟢',site:'Desmos',title:'Ch.7 Right Triangles and Trigonometry 시각화',url:'https://www.desmos.com/calculator/ummchpxpv3'}]},
+  'Ch.8 Quadrilaterals':{
+    concept:[{icon:'🔵',site:'Study.com',title:'Ch.8 Quadrilaterals 기본 개념',url:'https://study.com/academy/course/holt-mcdougal-larson-geometry-online-textbook-help.html'},{icon:'🟣',site:'Khan Academy',title:'Ch.8 Quadrilaterals 단원',url:'https://www.khanacademy.org/math/geometry/hs-geo-quadrilaterals-polygons'}],
+    practice:[{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Properties of Parallelograms',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Special Quadrilaterals',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Identify from Coordinates',url:'https://www.deltamath.com/app/learner'}],
+    visual:[{icon:'🟢',site:'Desmos',title:'Ch.8 Quadrilaterals 시각화',url:'https://www.desmos.com/geometry'}]},
+  'Ch.10 Properties of Circles':{
+    concept:[{icon:'🔵',site:'Study.com',title:'Ch.10 Properties of Circles 기본 개념',url:'https://study.com/academy/course/holt-mcdougal-larson-geometry-online-textbook-help.html'},{icon:'🟣',site:'Khan Academy',title:'Ch.10 Properties of Circles 단원',url:'https://www.khanacademy.org/math/geometry/hs-geo-circles'}],
+    practice:[{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Arc Length and Sector Area',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Inscribed Angles',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Tangent Lines',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Chord Secant Angles',url:'https://www.deltamath.com/app/learner'}],
+    visual:[{icon:'🟢',site:'GeoGebra',title:'Ch.10 Properties of Circles 시각화',url:'https://www.geogebra.org/m/QcDm2jyp'}]},
+  'Ch.11 Measurements of Figures and Solids':{
+    concept:[{icon:'🔵',site:'Study.com',title:'Ch.11 Measurements of Figures and Solids 기본 개념',url:'https://study.com/academy/course/holt-mcdougal-larson-geometry-online-textbook-help.html'},{icon:'🟣',site:'Khan Academy',title:'Ch.11 Measurements of Figures and Solids 단원',url:'https://www.khanacademy.org/math/geometry/hs-geo-solid-geometry'}],
+    practice:[{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Area of Regular Polygons',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Circumference and Area',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Volume of Prisms',url:'https://www.deltamath.com/app/learner'},{icon:'🔴',site:'DeltaMath',title:'[문제풀이] Surface Area',url:'https://www.deltamath.com/app/learner'}],
+    visual:[{icon:'🟢',site:'Desmos',title:'Ch.11 Measurements of Figures and Solids 시각화',url:'https://www.desmos.com/3d'}]},
+};
+function getGeoLinks(ds){var ch=SCHEDULE[ds]&&SCHEDULE[ds].geo&&SCHEDULE[ds].geo.chapter;return GEO_LINKS_BY_CHAPTER[ch]||{concept:[],practice:[],visual:[]};}
+
+const SUBJECTS={
+  geo:{label:'Geometry',barColor:'#7B72C4',doneClass:'geo-d',chapters:['Ch.6 Similarities','Ch.7 Right Triangles and Trigonometry','Ch.8 Quadrilaterals','Ch.10 Properties of Circles','Ch.11 Measurements of Figures and Solids']},
+  bio:{label:'Biology',barColor:'#3A9E72',doneClass:'bio-d',chapters:['Ch.17 The Tree of Life','Ch.18 Viruses & Prokaryotes','Ch.3 Cell Structure & Function','Ch.4 Cells & Energy','Ch.5 Cell Growth & Division','Ch.6 Meiosis & Mendel','Ch.7 Extending Mendelian Genetics','Ch.8 From DNA to Proteins']},
+  eng:{label:'Master English Grammar (Udemy)',barColor:'#C4832A',doneClass:'eng-d',chapters:['2 Present & Past Tenses','3 Present Tense All Aspects','4+5 Past & Future','6 Questions','7+8a Reported Speech & Passive','8b Passive Complex & Ergative','9a Modal Verbs Speculation','9b Modal Verbs Should/Would','10 Conditionals','11 Subjunctive & Inversion','12a Gerunds & Infinitives','12b Participles & to+-ing','13+14 Reporting & Relative Clauses','15+16a Adjectives & Articles','16b Articles 심화','17a Confusing Vocabulary 1','17b Confusing Vocabulary 2','18+19a Ellipsis & Linking Words','19b+20 Linking Words & Conjunctions','21 Adverbs','22+23 Prepositions & Cleft & Fronting']},
+  book:{label:'Book Reading',barColor:'#C4503A',doneClass:'book-d',chapters:['Week1','Week2','Week3','Week4','Week5']},
+  alg2:{label:'Algebra 2',barColor:'#1A5276',doneClass:'alg2-d',chapters:['Ch.1 Polynomials & Exponents','Ch.2 Factoring','Ch.3 Rational Expressions','Ch.4 Quadratic Equations']},
+};
+
+function minsToHM(m){ return m>=60 ? `${Math.floor(m/60)}h ${m%60>0?m%60+'m':''}`.trim() : `${m}분`; }
+
+// 날짜별 Geometry 세부 시간
+
+// Grammar 날짜별 시간
+
+
+function buildTasks(ds){
+  const d=SCHEDULE[ds];if(!d)return[];
+  const tasks=[];
+  const gl=getGeoLinks(ds);
+
+  if(d.geo){
+    // 개념강의 카드 — Study.com + Khan Academy
+    tasks.push({id:'geo_concept',subj:'geo',
+      title:'📖 개념강의 — '+d.geo.chapter,
+      sub:d.geo.tasks[0],
+      time:'40분', geoLinks:gl.concept});
+    // 문제풀이 카드 — DeltaMath
+    tasks.push({id:'geo_practice',subj:'geo',
+      title:'✏️ 문제풀이 — '+d.geo.chapter,
+      sub:d.geo.tasks[1],
+      time:'35분', geoLinks:gl.practice});
+    // 시각화 도구 링크 (GeoGebra / Desmos)
+    gl.visual.forEach(function(lk,i){
+      tasks.push({id:'geo_vis'+i,subj:'geo',
+        title:lk.icon+' ['+lk.site+'] '+lk.title,
+        sub:'시각화 도구',url:lk.url,time:'—',isLink:true});
+    });
+  }
+  if(d.bio){
+    d.bio.videos.forEach(function(v,i){
+      tasks.push({id:'bio_v'+i,subj:'bio',title:v.title,sub:d.bio.chapter,url:v.url,time:'~20분'});
+    });
+    if(d.bio.note) tasks.push({id:'bio_note',subj:'bio',title:'용어 정리 & 복습',sub:d.bio.note,time:'20분'});
+  }
+  if(d.eng){
+    tasks.push({id:'eng_lec',subj:'eng',
+      title:'📝 '+d.eng.sec+' '+d.eng.title,
+      sub:d.eng.note, url:d.eng.url, time:'95분', isEngLink:true});
+  }
+  if(d.alg2){
+    tasks.push({id:'alg2_lec',subj:'alg2',
+      title:'🔢 '+d.alg2.sec+' '+d.alg2.title,
+      sub:d.alg2.note, url:d.alg2.url, time:'60분', isEngLink:true});
+  }
+  if(d.book){
+    tasks.push({id:'book_read',subj:'book',title:'📚 원서 북리딩',sub:'깊이읽기 + 북토킹 준비',time:'120분'});
+  }
+  var carries=getCarryTasks(ds);
+  carries.forEach(function(ct){
+    tasks.push({id:'carry_'+ct.id,subj:ct.subj,
+      title:'⚠️ '+ct.title, sub:'전날 못 한 과제', time:'—', isCarry:true});
+  });
+  return tasks;
+}
+// ═══════════════════════════════════════════
+// STATE (localStorage only)
+// ═══════════════════════════════════════════
+
+function loadLocalState() {
+  try { return JSON.parse(localStorage.getItem('ssp_2026')||'{}'); } catch(e){return {};}
+}
+function saveLocalState() {
+  try { localStorage.setItem('ssp_2026', JSON.stringify(state)); } catch(e){}
+  fbSave();
+}
+
+/* ─── Firebase 동기화 ─────────────────────────────────── */
+var _fbTimer = null;
+
+function fbSave() {
+  if (!window._fbReady || !window._db) return;
+  clearTimeout(_fbTimer);
+  _fbTimer = setTimeout(function() {
+    try {
+      window._db.ref('planner/state').set(state)
+        .then(function(){ showSync('✓ 동기화됨'); })
+        .catch(function(e){ showSync('⚠ 저장 실패'); console.warn(e); });
+    } catch(e){ showSync('⚠ 오프라인'); }
+  }, 600);
+}
+
+function fbLoad(done) {
+  if (!window._fbReady || !window._db) {
+    // Firebase 미연결 시 로컬로만 실행
+    console.warn('Firebase not ready, running locally');
+    if (done) done();
+    return;
+  }
+  // 1회 로드
+  window._db.ref('planner/state').once('value').then(function(snap) {
+    if (snap.exists()) {
+      var fb = snap.val();
+      if (fb && typeof fb === 'object') {
+        ['tasks','chapters','notes','timetable'].forEach(function(k){
+          if (fb[k]) state[k] = Object.assign(state[k]||{}, fb[k]);
+        });
+        try { localStorage.setItem('ssp_2026', JSON.stringify(state)); } catch(e){}
+      }
+    }
+    showSync('🟢 연결됨');
+    if (done) done();
+  }).catch(function(e) {
+    console.warn('fbLoad error:', e);
+    showSync('⚠ 오프라인');
+    if (done) done();
+  });
+
+  // 실시간 리스너 — 다른 기기 변경 감지
+  window._db.ref('planner/state').on('value', function(snap) {
+    if (!snap.exists()) return;
+    var fb = snap.val();
+    if (!fb || typeof fb !== 'object') return;
+    var changed = false;
+    ['tasks','chapters','notes'].forEach(function(k){
+      if (!fb[k]) return;
+      Object.keys(fb[k]).forEach(function(id){
+        if (JSON.stringify((state[k]||{})[id]) !== JSON.stringify(fb[k][id])) {
+          if (!state[k]) state[k]={};
+          state[k][id] = fb[k][id];
+          changed = true;
+        }
+      });
+    });
+    if (changed) {
+      try { localStorage.setItem('ssp_2026', JSON.stringify(state)); } catch(e){}
+      var active = document.querySelector('.page.on');
+      if (active) {
+        var id = active.id;
+        if (id==='tab-today') renderToday();
+        else if (id==='tab-prog') { renderProg(); renderStats(); }
+      }
+      renderWeekBadge(); updateTotalHours(); updateHdrDate();
+      showSync('↓ 업데이트');
+    }
+  });
+}
+
+function fbSaveMom(ds, obj) {
+  if (!window._fbReady || !window._db) return;
+  try { window._db.ref('planner/mom/' + ds).set(obj); } catch(e){}
+}
+function fbLoadMom(ds, cb) {
+  if (!window._fbReady || !window._db) { cb(loadMomComment(ds)); return; }
+  window._db.ref('planner/mom/' + ds).once('value')
+    .then(function(s){ cb(s.exists() ? s.val() : loadMomComment(ds)); })
+    .catch(function(){ cb(loadMomComment(ds)); });
+}
+
+function showSync(msg) {
+  var el = document.getElementById('sync-dot');
+  if (!el) return;
+  el.textContent = msg;
+  clearTimeout(el._t);
+  if (msg !== '🟢 연결됨') {
+    el._t = setTimeout(function(){ el.textContent = '🟢 연결됨'; }, 3000);
+  }
+}
+
+
+let state = loadLocalState();
+if(!state.tasks) state.tasks={};
+if(!state.chapters) state.chapters={};
+if(!state.notes) state.notes={};
+
+
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+
+function isStudyDate(ds){return STUDY_DATES.includes(ds);}
+
+
+if(!state.timetable) state.timetable={};
+function saveState(){ saveLocalState(); }
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function go(name){
+  document.querySelectorAll('.page').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tn').forEach(b=>b.classList.remove('on'));
+  var tabEl=document.getElementById('tab-'+name);
+  if(tabEl) tabEl.classList.add('on');
+  document.querySelectorAll('.tn').forEach(b=>{
+    if(b.getAttribute('onclick')==="go('"+name+"')") b.classList.add('on');
+  });
+  // scroll to top on tab switch
+  var ms=document.getElementById('main-scroll');
+  if(ms) ms.scrollTop=0;
+  if(name==='plan')  renderPlan();
+  if(name==='sched') renderSched();
+  if(name==='prog')  { renderProg(); renderStats(); }
+  if(name==='tt')    renderTT();
+  if(name==='co')    renderCO();
+  if(name==='today'){
+    // 타임테이블 done 상태를 state에 반영 후 렌더
+    var _ds=todayStr();
+    if(!state.tasks[_ds]) state.tasks[_ds]={};
+    for(var _i=0;_i<ttPlaced.length;_i++){
+      state.tasks[_ds][ttPlaced[_i].id]=!!ttPlaced[_i].done;
+    }
+    renderToday(); renderStats();
+  }
+}
+
+// ═══════════════════════════════════════════
+// TODAY
+// ═══════════════════════════════════════════
+function minsToHM(m){ return m>=60?`${Math.floor(m/60)}h${m%60>0?' '+m%60+'m':''}`:m+'분'; }
+
+function isDayAllDone(ds){
+  const tasks=buildTasks(ds).filter(t=>!t.isLink);
+  if(!tasks.length) return false;
+  const dt=state.tasks[ds]||{};
+  return tasks.every(t=>dt[t.id]);
+}
+
+function renderToday(){
+  const ds=todayStr();
+  const d=new Date(ds);
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('td-date').textContent=`${d.getDate()} ${mo[d.getMonth()]} · ${DAYS_KO[d.getDay()]}요일`;
+
+  const badge=document.getElementById('td-badge');
+  const noteEl=document.getElementById('td-note');
+  const container=document.getElementById('td-tasks');
+  const pbarWrap=document.getElementById('td-pbar');
+
+  if(!isStudyDate(ds)){
+    badge.textContent='휴식일 🌿'; badge.className='today-badge br';
+    container.innerHTML=`<div class="rest-msg"><div class="big">오늘은 쉬는 날이에요</div><p>충분히 쉬고 내일을 위한 에너지를 충전하세요 ☀️</p></div>`;
+    pbarWrap.style.display='none';
+    noteEl.value=state.notes[ds]||'';
+    noteEl.oninput=()=>{state.notes[ds]=noteEl.value;saveState();};
+    return;
+  }
+
+  const wkIdx=WEEKS.findIndex(w=>w.days.includes(ds));
+  document.getElementById('td-week').textContent=wkIdx>=0?WEEKS[wkIdx].label:'';
+  badge.className='today-badge bs';
+  const tasks=buildTasks(ds);
+  if(!state.tasks[ds]) state.tasks[ds]={};
+  const checkable=tasks.filter(t=>!t.isLink);
+  const done=checkable.filter(t=>state.tasks[ds][t.id]).length;
+  const pct=checkable.length?Math.round(done/checkable.length*100):0;
+  const dt2=DAY_TIMES[ds];
+  badge.textContent=`${done}/${checkable.length} 완료`;
+  pbarWrap.style.display='block';
+  document.getElementById('td-fill').style.width=pct+'%';
+  const gT=dt2?minsToHM(dt2.geo):'';const bT=dt2?minsToHM(dt2.bio):'';
+  const eT=dt2?minsToHM(dt2.eng):'';const rkT=dt2&&dt2.book>0?minsToHM(dt2.book):null;
+  const bp=[`<span style="color:var(--geo)">Geo ${gT}</span>`,`<span style="color:var(--bio)">Bio ${bT}</span>`,
+    `<span style="color:var(--eng)">Gram ${eT}</span>`,rkT?`<span style="color:var(--book)">Book ${rkT}</span>`:null
+  ].filter(Boolean).join(' <span style="color:var(--border2)">+</span> ');
+  document.getElementById('td-plbl').innerHTML=`<span style="font-weight:600">${dt2?minsToHM(dt2.total):''}</span>&nbsp;&nbsp;${bp}&nbsp;&nbsp;<span style="color:var(--text3)">(${pct}%)</span>`;
+
+  container.innerHTML='';
+
+  // ── Carryover section (못 한 과제) ────────────────────
+  const carryItems=getCarryTasks(ds);
+  if(carryItems.length){
+    const carrySection=document.createElement('div');
+    carrySection.style.cssText='margin-bottom:14px;background:#FFF8F0;border:1px solid #F5C97A;border-radius:12px;padding:12px 14px';
+    carrySection.innerHTML='<div style="font-size:11px;font-weight:700;color:#7A4A0D;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">⚠️ 전날 못 한 과제</div>';
+    const carryList=document.createElement('div');carryList.className='task-list';
+    carryItems.forEach(function(ct){
+      const citem=document.createElement('div');
+      citem.className='task-item'+(state.tasks[ds]['carry_'+ct.id]?' done':'');
+      citem.style.cssText='background:#FFF;border-color:#F5C97A';
+      const CO_COL2={geo:['var(--geo-bg)','var(--geo)'],bio:['var(--bio-bg)','var(--bio)'],eng:['var(--eng-bg)','var(--eng)'],book:['var(--book-bg)','var(--book)'],alg2:['var(--alg2-bg)','var(--alg2)'],etc:['var(--surface2)','var(--text2)']};
+      const CO_LBL2={geo:'Geometry',bio:'Biology',eng:'Grammar',book:'Book',alg2:'Algebra 2',etc:'기타'};
+      const c=CO_COL2[ct.subj]||CO_COL2.etc;
+      const isDoneC=!!state.tasks[ds]['carry_'+ct.id];
+      citem.innerHTML=`<div class="task-cb">${isDoneC?'✓':''}</div>
+        <div class="task-body">
+          <div class="task-title"><span style="background:${c[0]};color:${c[1]};font-size:10px;padding:2px 7px;border-radius:20px;margin-right:6px;font-weight:500">${CO_LBL2[ct.subj]||ct.subj}</span>${ct.title}</div>
+        </div>
+        <button style="font-size:10px;padding:2px 8px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;color:#999;flex-shrink:0" onclick="clearCarryTask('${ds}','${ct.id}');renderToday()">지움</button>`;
+      citem.querySelector('.task-cb').parentElement.onclick=(e)=>{
+        if(e.target.tagName==='BUTTON') return;
+        state.tasks[ds]['carry_'+ct.id]=!state.tasks[ds]['carry_'+ct.id];
+        saveState(); renderToday(); renderStats(); updateHdrDate(); updateTotalHours(); renderWeekBadge();
+      };
+      carryList.appendChild(citem);
+    });
+    carrySection.appendChild(carryList);
+    container.appendChild(carrySection);
+  }
+  // ─────────────────────────────────────────────────────
+
+  const list=document.createElement('div');list.className='task-list';
+  tasks.filter(t=>!t.isCarry).forEach(t=>{
+    const isDone=!!state.tasks[ds][t.id];
+    const item=document.createElement('div');
+    if(t.isLink){
+      const isDM=t.title.includes('DeltaMath'),isSt=t.title.includes('Study.com');
+      const bg=isDM?'#FDECEA':isSt?'var(--eng-bg)':'var(--geo-bg)';
+      const col=isDM?'#C0392B':isSt?'var(--eng)':'var(--geo)';
+      item.className='task-item';
+      item.style.cssText=`background:${bg};border-color:transparent;padding:10px 14px`;
+      item.innerHTML=`<div class="task-body"><div class="task-title"><a href="${t.url}" target="_blank" style="color:${col};text-decoration:none;font-weight:500">${t.title} ↗</a></div></div>`;
+    } else if(t.isEngLink){
+      const isDone=!!state.tasks[ds][t.id];
+      const iA=t.subj==='alg2';
+      const bg=iA?'var(--alg2-bg)':'var(--eng-bg)';
+      const col=iA?'var(--alg2)':'var(--eng)';
+      const linkLabel=iA?'🔗 JM Education 열기':'🔗 Udemy 코스 열기';
+      item.className='task-item'+(isDone?' done':'');
+      item.style.cssText='background:'+bg+';border-color:'+(isDone?'transparent':col+'44');
+      item.innerHTML=`<div class="task-cb" style="${isDone?`background:${col};border-color:${col};color:#fff`:`border-color:${col}`}">${isDone?'✓':''}</div>
+        <div class="task-body">
+          <div class="task-title" style="color:${col};font-weight:600">${t.title}</div>
+          <div class="task-sub" style="margin-top:4px">
+            <a href="${t.url}" target="_blank" style="display:inline-block;margin-right:8px;margin-top:4px;font-size:11px;color:${col};font-weight:600;text-decoration:none">${linkLabel} ↗</a>
+          </div>
+          <div class="task-sub">${t.sub}</div>
+        </div>
+        <div class="task-time">${t.time}</div>`;
+      item.querySelector('.task-cb').parentElement.onclick=(e)=>{
+        if(e.target.tagName==='A') return;
+        state.tasks[ds][t.id]=!state.tasks[ds][t.id];
+        saveState(); renderToday(); renderStats(); updateHdrDate(); updateTotalHours(); renderWeekBadge();
+        for(var _i=0;_i<ttPlaced.length;_i++){if(ttPlaced[_i].id===t.id){ttPlaced[_i].done=state.tasks[ds][t.id];}}
+        ttSave();
+        if(document.getElementById('tab-tt').classList.contains('on')) ttDrawBlocks();
+        if(!state.tasks[ds][t.id]) coDoneRemove(t.title,t.subj);
+      };
+    } else if(t.geoLinks && t.geoLinks.length){
+      // Geo concept/practice card with inline links
+      const isDM=t.id==='geo_practice';
+      const bg=isDM?'#FDECEA':'var(--geo-bg)';
+      const col=isDM?'#C0392B':'var(--geo)';
+      const isDone=!!state.tasks[ds][t.id];
+      item.className='task-item'+(isDone?' done':'');
+      item.style.cssText=`background:${bg};border-color:${isDone?'transparent':col+'44'}`;
+      const linksHtml=t.geoLinks.map(lk=>`<a href="${lk.url}" target="_blank" style="display:inline-block;margin-right:8px;margin-top:4px;font-size:11px;color:${col};font-weight:600;text-decoration:none">${lk.icon} ${lk.site} ↗</a>`).join('');
+      item.innerHTML=`<div class="task-cb" style="border-color:${col}">${isDone?'✓':''}</div>
+        <div class="task-body">
+          <div class="task-title" style="color:${col};font-weight:600">${t.title}</div>
+          <div class="task-sub" style="margin-top:4px">${linksHtml}</div>
+        </div>
+        <div class="task-time">${t.time}</div>`;
+      item.querySelector('.task-cb').style.cssText=isDone?`background:${col};border-color:${col};color:#fff`:`border-color:${col}`;
+      item.onclick=(e)=>{
+        if(e.target.tagName==='A') return;
+        state.tasks[ds][t.id]=!state.tasks[ds][t.id];
+        saveState(); renderToday(); renderStats(); updateHdrDate(); updateTotalHours(); renderWeekBadge();
+        // 타임테이블 블록 done 상태도 동기화
+        if(typeof ttPlaced!=='undefined'){
+          for(var i=0;i<ttPlaced.length;i++){
+            if(ttPlaced[i].id===t.id){ ttPlaced[i].done=state.tasks[ds][t.id]; }
+          }
+          if(typeof ttSave==='function') ttSave();
+          if(document.getElementById('tab-tt').classList.contains('on')) ttDrawBlocks();
+        }
+        // 완료→취소 시 완료된 과제에서 제거
+        if(!state.tasks[ds][t.id]) coDoneRemove(t.title, t.subj);
+      };
+    } else {
+      item.className='task-item'+(isDone?' done':'');
+      const SUBJMAP={geo:'Geometry',bio:'Biology',eng:'Grammar Inside 3',book:'Book Reading'};
+      item.innerHTML=`<div class="task-cb">${isDone?'✓':''}</div>
+        <div class="task-body">
+          <div class="task-title"><span class="pill p${t.subj[0]}" style="margin-right:6px">${SUBJMAP[t.subj]||t.subj}</span>${t.url?`<a href="${t.url}" target="_blank" style="color:inherit;text-decoration:none">${t.title} ↗</a>`:t.title}</div>
+          <div class="task-sub">${t.sub||''}</div>
+        </div>
+        <div class="task-time">${t.time}</div>`;
+      item.onclick=(e)=>{
+        if(e.target.tagName==='A') return;
+        state.tasks[ds][t.id]=!state.tasks[ds][t.id];
+        saveState(); renderToday(); renderStats(); updateHdrDate(); updateTotalHours(); renderWeekBadge();
+        // 타임테이블 블록 done 동기화
+        for(var _i=0;_i<ttPlaced.length;_i++){
+          if(ttPlaced[_i].id===t.id){ ttPlaced[_i].done=state.tasks[ds][t.id]; }
+        }
+        ttSave();
+        if(document.getElementById('tab-tt').classList.contains('on')) ttDrawBlocks();
+        // 완료→취소 시 완료된 과제에서 제거
+        if(!state.tasks[ds][t.id]) coDoneRemove(t.title, t.subj);
+      };
+    }
+    list.appendChild(item);
+  });
+  container.appendChild(list);
+  noteEl.value=state.notes[ds]||'';
+  noteEl.oninput=()=>{state.notes[ds]=noteEl.value;saveState();};
+  renderMomComment(ds);
+  renderWeekBadge();
+  updateTotalHours();
+}
+
+// ═══════════════════════════════════════════
+// PLANNER
+// ═══════════════════════════════════════════
+function renderPlan(){
+  const el=document.getElementById('plan-body');el.innerHTML='';
+  const today=todayStr();
+  const DENS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  WEEKS.forEach(w=>{
+    const block=document.createElement('div');block.className='week-block';
+    block.innerHTML=`<div class="week-lbl">${w.label}</div>`;
+    const grid=document.createElement('div');grid.className='days-grid';
+    for(let i=0;i<w.startDow;i++) grid.appendChild(document.createElement('div'));
+    w.days.forEach(ds=>{
+      const d=new Date(ds);
+      const isStudy=isStudyDate(ds),isToday=ds===today,allDone=isStudy&&isDayAllDone(ds);
+      const card=document.createElement('div');
+      card.className='day-card'+(!isStudy?' off':'')+(isToday?' today':'')+(allDone?' alldone':'');
+      const sc=SCHEDULE[ds];
+      card.innerHTML=`<div class="done-dot"></div><div class="day-dow">${DENS[d.getDay()]}</div><div class="day-num">${d.getDate()}</div>${sc?`<div class="day-pills"><div class="dp dp-g">${sc.geo.chapter.split(' ').slice(0,2).join(' ')}</div><div class="dp dp-b">${sc.bio.chapter.split(' ').slice(0,2).join(' ')}</div><div class="dp dp-e">${sc.eng.title.split(' ').slice(0,2).join(' ')}</div>${sc.alg2?`<div class="dp" style="background:var(--alg2-bg);color:var(--alg2)">${sc.alg2.sec} ${sc.alg2.title.split(' ').slice(0,1).join(' ')}</div>`:''} ${sc.book?'<div class="dp dp-r">Book 2h</div>':''}</div>`:''}`;
+      if(isStudy) card.onclick=()=>go('today');
+      grid.appendChild(card);
+    });
+    const total=w.startDow+w.days.length;const rem=total%7===0?0:7-(total%7);
+    for(let i=0;i<rem;i++) grid.appendChild(document.createElement('div'));
+    block.appendChild(grid);el.appendChild(block);
+  });
+}
+
+// ═══════════════════════════════════════════
+// SCHEDULE
+// ═══════════════════════════════════════════
+function renderSched(){
+  const el=document.getElementById('sched-body');el.innerHTML='';
+  const DENS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  WEEKS.forEach(w=>{
+    const block=document.createElement('div');block.className='sched-block';
+    block.innerHTML=`<div class="sched-week">${w.label}</div>`;
+    const days=document.createElement('div');days.className='sched-days';
+    w.days.forEach(ds=>{
+      const d=new Date(ds);const sc=SCHEDULE[ds];
+      const dt=DAY_TIMES[ds];const totalT=dt?minsToHM(dt.total):(sc.book?'5h 20m':'3h 20m');
+      const breakdownT=dt?`Geo ${minsToHM(dt.geo)} · Bio ${minsToHM(dt.bio)} · Gram ${minsToHM(dt.eng)}${dt.alg2?' · Alg2 '+minsToHM(dt.alg2):''}${dt.book?' · Book '+minsToHM(dt.book):''}` :'';
+      const vids=sc.bio.videos.map(v=>`<a class="yt-link" href="${v.url}" target="_blank">${v.title}</a>`).join('');
+      const glLinks=[...getGeoLinks(ds).concept,...getGeoLinks(ds).practice,...getGeoLinks(ds).visual];
+      const gLinks=glLinks.map(lk=>{
+        const col=lk.site==='Study.com'?'var(--eng)':lk.site==='DeltaMath'?'#C0392B':'var(--geo)';
+        const fw=lk.site==='Study.com'||lk.site==='DeltaMath'?'600':'400';
+        return `<a class="yt-link" href="${lk.url}" target="_blank" style="color:${col};font-weight:${fw}">${lk.icon} ${lk.site} — ${lk.title}</a>`;
+      }).join('');
+      const dayEl=document.createElement('div');dayEl.className='sched-day';
+      dayEl.innerHTML=`
+        <div class="sched-hdr" onclick="this.parentElement.classList.toggle('open')">
+          <span class="sched-date">${d.getMonth()+1}/${d.getDate()}</span>
+          <span class="sched-dow">${DENS[d.getDay()]}</span>
+          <span class="sched-ps">
+            <span class="pill pg">${sc.geo.chapter.split(' ').slice(0,2).join(' ')}</span>
+            <span class="pill pb">${sc.bio.chapter.split(' ').slice(0,2).join(' ')}</span>
+            <span class="pill pe">${sc.eng.title.split(' ').slice(0,2).join(' ')}</span>
+            ${sc.alg2?`<span class="pill" style="background:var(--alg2-bg);color:var(--alg2)">${sc.alg2.sec} ${sc.alg2.title.split(' ')[0]}</span>`:''}
+            ${sc.book?'<span class="pill pr">Book 2h</span>':''}
+          </span>
+          <span class="sched-t" title="${breakdownT}">${totalT}</span>
+          <span class="sched-arr">▾</span>
+        </div>
+        <div class="sched-body">
+          ${breakdownT?`<div style="font-size:11px;color:var(--text2);padding:8px 0 2px">${breakdownT}</div>`:''}
+          <div class="sched-grid">
+            <div class="sched-col">
+              <div class="si si-g">
+                <div class="si-lbl">Geometry</div>
+                <div class="si-title">${sc.geo.chapter}</div>
+                <div class="si-note">${sc.geo.tasks.join(' · ')}</div>
+                <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(74,63,143,.15)">
+                  <div style="font-size:10px;font-weight:700;color:var(--geo);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">📚 학습 자료</div>
+                  ${gLinks}
+                </div>
+              </div>
+              <div class="si si-b">
+                <div class="si-lbl">Biology</div>
+                <div class="si-title">${sc.bio.chapter}</div>
+                <div class="si-note">${vids}${sc.bio.note}</div>
+              </div>
+            </div>
+            <div class="sched-col">
+              <div class="si si-e">
+                <div class="si-lbl">Master English Grammar (Udemy)</div>
+                <div class="si-title">${sc.eng.sec} ${sc.eng.title}</div>
+                <div class="si-note">${sc.eng.note}<br><a class="yt-link" href="${sc.eng.url}" target="_blank" style="color:var(--eng);font-weight:600">🔗 Udemy 코스 열기 ↗</a></div>
+              </div>
+              ${sc.alg2?`<div class="si" style="background:var(--alg2-bg)">
+                <div class="si-lbl" style="color:var(--alg2)">Algebra 2</div>
+                <div class="si-title">${sc.alg2.sec} ${sc.alg2.title}</div>
+                <div class="si-note">${sc.alg2.note}<br><a class="yt-link" href="${sc.alg2.url}" target="_blank" style="color:var(--alg2);font-weight:600">🔗 JM Education ↗</a></div>
+              </div>`:''}
+              ${sc.book?`<div class="si si-r">
+                <div class="si-lbl">Book Reading</div>
+                <div class="si-title">깊이읽기 + 북토킹 준비</div>
+                <div class="si-note">깊이읽기 60분 + 북토킹 준비 60분 = 2시간</div>
+              </div>`:''}
+            </div>
+          </div>
+        </div>`;
+      days.appendChild(dayEl);
+    });
+    block.appendChild(days);el.appendChild(block);
+  });
+}
+
+// ═══════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════
+function renderStats(){
+  updateTotalHours();
+  const daysDone=STUDY_DATES.filter(ds=>isDayAllDone(ds)).length;
+  let total=0,done=0;
+  STUDY_DATES.forEach(ds=>{const tasks=buildTasks(ds);const dt=state.tasks[ds]||{};total+=tasks.filter(t=>!t.isLink).length;done+=tasks.filter(t=>!t.isLink&&dt[t.id]).length;});
+  const pct=total?Math.round(done/total*100):0;
+  const geoCh=Object.values(state.chapters['geo']||{}).filter(Boolean).length;
+  const bioCh=Object.values(state.chapters['bio']||{}).filter(Boolean).length;
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${daysDone}</div><div class="stat-lbl">완료 학습일 / 15</div></div>
+    <div class="stat-card"><div class="stat-num">${pct}%</div><div class="stat-lbl">전체 진행률</div></div>
+    <div class="stat-card"><div class="stat-num">${geoCh}/5</div><div class="stat-lbl">Geometry</div></div>
+    <div class="stat-card"><div class="stat-num">${bioCh}/8</div><div class="stat-lbl">Biology</div></div>`;
+}
+
+function renderProg(){
+  const el=document.getElementById('prog-body');el.innerHTML='';
+  const BAR={geo:'#7B72C4',bio:'#3A9E72',eng:'#C4832A',book:'#C4503A'};
+  const DC={geo:'geo-d',bio:'bio-d',eng:'eng-d',book:'book-d'};
+  Object.entries(SUBJECTS).forEach(([key,s])=>{
+    if(!state.chapters[key]) state.chapters[key]={};
+    const done=s.chapters.filter((_,i)=>state.chapters[key][i]).length;
+    const pct=Math.round(done/s.chapters.length*100);
+    const card=document.createElement('div');card.className='subj-card';
+    card.innerHTML=`
+      <div class="subj-hdr"><span style="font-size:14px;font-weight:600">${s.label}</span><span style="font-size:13px;color:var(--text2)">${done}/${s.chapters.length} · ${pct}%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${BAR[key]||'#999'}"></div></div>
+      <div class="ch-grid">${s.chapters.map((ch,i)=>`<div class="ch-tag ${state.chapters[key][i]?'done '+DC[key]:''}" onclick="toggleCh('${key}',${i})">${ch}</div>`).join('')}</div>`;
+    el.appendChild(card);
+  });
+}
+
+function toggleCh(key,idx){
+  if(!state.chapters[key]) state.chapters[key]={};
+  state.chapters[key][idx]=!state.chapters[key][idx];
+  saveState(); renderProg(); renderStats();
+}
+
+// ═══════════════════════════════════════════
+// TIMETABLE — self-contained
+// ═══════════════════════════════════════════
+var TT_SH=36,TT_SM=30,TT_ENDH=22;
+var ttPlaced=[],ttDrag=null,ttRsz=null;
+var TT_COL={geo:['var(--geo-bg)','var(--geo)'],bio:['var(--bio-bg)','var(--bio)'],eng:['var(--eng-bg)','var(--eng)'],book:['var(--book-bg)','var(--book)'],alg2:['var(--alg2-bg)','var(--alg2)'],etc:['var(--surface2)','var(--text2)']};
+var TT_LBL={geo:'Geometry',bio:'Biology',eng:'Grammar',book:'Book',alg2:'Algebra 2',etc:'기타'};
+
+function ttH(){return parseInt(document.getElementById('tt-start').value);}
+function ttN(){return (TT_ENDH-ttH())*2;}
+function ttT(i){var m=ttH()*60+i*TT_SM;return('0'+Math.floor(m/60)).slice(-2)+':'+('0'+m%60).slice(-2);}
+function ttD(s){var m=s*TT_SM;return m<60?m+'분':Math.floor(m/60)+'시간'+(m%60?' '+m%60+'분':'');}
+function ttMins(s){if(!s||s==='—')return 30;var r=0,h=s.match(/(\d+)\s*h/),m=s.match(/(\d+)\s*m/);if(h)r+=parseInt(h[1])*60;if(m)r+=parseInt(m[1]);if(!r){var n=s.match(/(\d+)/);if(n)r=parseInt(n[1]);}return r||30;}
+function ttC(subj){return TT_COL[subj]||TT_COL.etc;}
+function ttSave(){
+  var ds=todayStr();
+  try{localStorage.setItem('ssp_tt_'+ds,JSON.stringify(ttPlaced));}catch(e){}
+}
+function ttLoad(){
+  var ds=todayStr();
+  try{var r=localStorage.getItem('ssp_tt_'+ds);ttPlaced=r?JSON.parse(r):[];}catch(e){ttPlaced=[];}
+}
+
+function ttBuildPool(){
+  var el=document.getElementById('tt-tasks'),ex=document.getElementById('tt-extra');
+  if(!el||!ex) return;
+  el.innerHTML=''; ex.innerHTML='';
+  var pids={};ttPlaced.forEach(function(b){pids[b.id]=1;});
+  var tasks=[];try{tasks=buildTasks(todayStr()).filter(function(t){return !t.isLink;});}catch(e){}
+  if(!tasks.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);text-align:center;padding:8px 0">오늘은 학습일 아님</p>';}
+  else tasks.forEach(function(t){
+    var dur=Math.max(1,Math.round(ttMins(t.time)/TT_SM));
+    var c=ttC(t.subj),isP=!!pids[t.id];
+    var d=document.createElement('div');
+    d.className='tt-card'+(isP?' tt-placed':'');
+    d.setAttribute('draggable',isP?'false':'true');
+    d.style.background=c[0];d.style.color=c[1];
+    d.innerHTML='<div class="tt-cname">'+t.title+'</div><div class="tt-cmeta">'+(SUBJECTS[t.subj]?SUBJECTS[t.subj].label:'')+' · '+t.time+'</div>';
+    if(!isP)(function(task,dd){
+      d.addEventListener('dragstart',function(e){ttDrag={id:task.id,title:task.title,subj:task.subj,dur:dd};d.classList.add('tt-ghost');e.dataTransfer.effectAllowed='move';});
+      d.addEventListener('dragend',function(){d.classList.remove('tt-ghost');});
+    })(t,dur);
+    el.appendChild(d);
+  });
+  [{id:'brk',title:'☕ 휴식',dur:1},{id:'meal',title:'🍱 식사',dur:2},{id:'sport',title:'⚽ 운동/외출',dur:2},{id:'worship',title:'🙏 가정예배',dur:1}].forEach(function(x){
+    var c=ttC('etc'),d=document.createElement('div');
+    d.className='tt-card';d.setAttribute('draggable','true');
+    d.style.background=c[0];d.style.color=c[1];
+    d.innerHTML='<div class="tt-cname">'+x.title+'</div><div class="tt-cmeta">'+ttD(x.dur)+'</div>';
+    (function(ex2){d.addEventListener('dragstart',function(e){ttDrag={id:ex2.id+'_'+Date.now(),title:ex2.title,subj:'etc',dur:ex2.dur};e.dataTransfer.effectAllowed='move';});})(x);
+    ex.appendChild(d);
+  });
+}
+
+function ttBuildGrid(){
+  var n=ttN(),tc=document.getElementById('tt-tcol'),sc=document.getElementById('tt-scol'),cv=document.getElementById('tt-canvas');
+  if(!tc||!sc||!cv) return;
+  tc.innerHTML='';
+  var old=sc.querySelectorAll('.tt-slot');for(var i=0;i<old.length;i++)sc.removeChild(old[i]);
+  for(var i=0;i<n;i++){var d=document.createElement('div');d.className='tt-tcell'+(i%2===0?' tt-hr':'');d.textContent=i%2===0?ttT(i):'';tc.appendChild(d);}
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div');d.className='tt-slot'+(i%2===0?' tt-hr-slot':'');d.setAttribute('data-slot',String(i));
+    (function(slot,idx){
+      slot.addEventListener('dragover',function(e){e.preventDefault();slot.classList.add('tt-over');});
+      slot.addEventListener('dragleave',function(){slot.classList.remove('tt-over');});
+      slot.addEventListener('drop',function(e){
+        e.preventDefault();slot.classList.remove('tt-over');if(!ttDrag)return;
+        ttPlaced=ttPlaced.filter(function(b){return b.id!==ttDrag.id;});
+        ttPlaced.push({uid:ttDrag.id+'_'+Date.now(),id:ttDrag.id,title:ttDrag.title,subj:ttDrag.subj,si:idx,dur:ttDrag.dur});
+        ttDrag=null;ttSave();ttBuildPool();ttDrawBlocks();
+      });
+    })(d,i);
+    sc.insertBefore(d,cv);
+  }
+  var h=n*TT_SH;sc.style.height=h+'px';cv.style.height=h+'px';
+  ttDrawBlocks();
+}
+
+function ttDrawBlocks(){
+  var cv=document.getElementById('tt-canvas'),n=ttN();if(!cv)return;
+  cv.innerHTML='';
+  ttPlaced.forEach(function(b){
+    if(b.si<0||b.si>=n)return;
+    var c=ttC(b.subj),el=document.createElement('div');
+    el.className='tt-block'+(b.done?' tt-done':'');
+    el.style.top=(b.si*TT_SH)+'px';el.style.height=Math.max(TT_SH-2,b.dur*TT_SH-2)+'px';
+    el.style.background=c[0];el.style.color=c[1];
+    var eS=Math.min(n,b.si+b.dur);
+    el.innerHTML='<div class="tt-bname">'+b.title+'</div>'
+      +'<div class="tt-btime">'+ttT(b.si)+'–'+ttT(eS)+' · '+ttD(b.dur)+'</div>'
+      +'<button class="tt-del-btn" data-uid="'+b.uid+'">✕</button>'
+      +'<button class="tt-done-btn" data-uid="'+b.uid+'">'+(b.done?'↩':'✓')+'</button>'
+      +'<div class="tt-rsz" data-uid="'+b.uid+'">⠷</div>';
+    el.querySelector('.tt-del-btn').addEventListener('click',function(){
+      var uid=this.getAttribute('data-uid');
+      ttPlaced=ttPlaced.filter(function(b){return b.uid!==uid;});
+      ttSave();ttBuildPool();ttDrawBlocks();
+    });
+    el.querySelector('.tt-done-btn').addEventListener('click',function(ev){
+      ev.stopPropagation();
+      var uid=this.getAttribute('data-uid');
+      var ds=todayStr();
+      for(var i=0;i<ttPlaced.length;i++){
+        if(ttPlaced[i].uid===uid){
+          ttPlaced[i].done=!ttPlaced[i].done;
+          if(!state.tasks[ds]) state.tasks[ds]={};
+          // 오늘할일 체크와 동기화 (완료↔취소 모두)
+          state.tasks[ds][ttPlaced[i].id]=ttPlaced[i].done;
+          saveState();
+          // 완료할 때만 기록 추가 (취소할 땐 목록에서 제거)
+          if(ttPlaced[i].done) coDoneAdd(ttPlaced[i].title, ttPlaced[i].subj);
+          else coDoneRemove(ttPlaced[i].title, ttPlaced[i].subj);
+          break;
+        }
+      }
+      ttSave(); ttDrawBlocks();
+      // 오늘할일 항상 state 갱신 (탭 열림 여부 무관)
+      if(document.getElementById('tab-today').classList.contains('on')) renderToday();
+      // stat badge 업데이트
+      renderStats();
+    });
+    (function(block){
+      var rh=el.querySelector('.tt-rsz');
+      rh.addEventListener('mousedown',function(ev){ev.preventDefault();ev.stopPropagation();ttRsz={uid:block.uid,sy:ev.clientY,orig:block.dur};document.addEventListener('mousemove',ttMM);document.addEventListener('mouseup',ttMU);});
+      rh.addEventListener('touchstart',function(ev){ev.preventDefault();ttRsz={uid:block.uid,sy:ev.touches[0].clientY,orig:block.dur};document.addEventListener('touchmove',ttTM,{passive:false});document.addEventListener('touchend',ttTE);},{passive:false});
+    })(b);
+    cv.appendChild(el);
+  });
+  ttSumm();
+}
+function ttAR(cy){if(!ttRsz)return;var delta=Math.round((cy-ttRsz.sy)/TT_SH),n=ttN();for(var i=0;i<ttPlaced.length;i++){if(ttPlaced[i].uid===ttRsz.uid){ttPlaced[i].dur=Math.max(1,Math.min(n-ttPlaced[i].si,ttRsz.orig+delta));break;}}ttDrawBlocks();}
+function ttMM(e){ttAR(e.clientY);}function ttMU(){ttRsz=null;document.removeEventListener('mousemove',ttMM);document.removeEventListener('mouseup',ttMU);ttSave();}
+function ttTM(e){e.preventDefault();ttAR(e.touches[0].clientY);}function ttTE(){ttRsz=null;document.removeEventListener('touchmove',ttTM);document.removeEventListener('touchend',ttTE);ttSave();}
+
+function ttSumm(){
+  var el=document.getElementById('tt-summ');if(!el)return;
+  if(!ttPlaced.length){el.innerHTML='<span style="color:var(--text3);font-size:12px">과제를 드래그해서 시간표를 채워보세요</span>';return;}
+  var byS={};ttPlaced.forEach(function(b){byS[b.subj]=(byS[b.subj]||0)+b.dur*TT_SM;});
+  var html=Object.keys(byS).map(function(s){var c=ttC(s);return '<span style="color:'+c[1]+';font-weight:600">'+(TT_LBL[s]||s)+' '+ttD(byS[s]/TT_SM)+'</span>';}).join('<span style="color:var(--border2)"> · </span>');
+  var tot=Object.keys(byS).reduce(function(a,s){return a+byS[s];},0);
+  html+='<span style="margin-left:auto;font-weight:700;color:var(--text)">총 '+ttD(tot/TT_SM)+'</span>';
+  el.innerHTML=html;
+}
+
+function ttClear(){
+  var ds=todayStr();
+  var d=new Date(ds+'T00:00:00');
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(!confirm(d.getDate()+' '+mo[d.getMonth()]+' 타임테이블만 초기화할까요? (다른 날짜 영향 없음)')) return;
+  ttPlaced=[];
+  ttSave();ttBuildPool();ttDrawBlocks();
+}
+function ttRebuild(){ttBuildGrid();}
+function renderTT(){
+  var ds=todayStr(),d=new Date(ds+'T00:00:00');
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var lbl=document.getElementById('tt-title');
+  if(lbl) lbl.textContent=d.getDate()+' '+mo[d.getMonth()]+' ('+DAYS_KO[d.getDay()]+') 타임테이블';
+  ttLoad();
+  // state.tasks 기준으로 ttPlaced.done 동기화
+  var dt=state.tasks[ds]||{};
+  for(var i=0;i<ttPlaced.length;i++){
+    if(ttPlaced[i].id in dt){ ttPlaced[i].done=!!dt[ttPlaced[i].id]; }
+  }
+  ttBuildPool(); ttBuildGrid();
+}
+
+// ═══════════════════════════════════════════
+// CARRY-OVER (넘기기 탭)
+// ═══════════════════════════════════════════
+var coItems = [];   // [{id,title,subj}] — 못 한 과제
+var coDone  = [];   // [{title,subj,time}] — 완료된 과제 로그
+
+function coLoad(){
+  try{ var r=localStorage.getItem('ssp_co'); coItems=r?JSON.parse(r):[]; }catch(e){coItems=[];}
+  // coDone은 날짜별 — 날짜 바뀌면 자동 초기화
+  var ds=todayStr();
+  try{ var r=localStorage.getItem('ssp_codone_'+ds); coDone=r?JSON.parse(r):[]; }catch(e){coDone=[];}
+}
+function coSave(){
+  var ds=todayStr();
+  try{ localStorage.setItem('ssp_co',JSON.stringify(coItems)); }catch(e){}
+  try{ localStorage.setItem('ssp_codone_'+ds,JSON.stringify(coDone)); }catch(e){}
+}
+
+var CO_COL={geo:['var(--geo-bg)','var(--geo)'],bio:['var(--bio-bg)','var(--bio)'],eng:['var(--eng-bg)','var(--eng)'],book:['var(--book-bg)','var(--book)'],alg2:['var(--alg2-bg)','var(--alg2)'],etc:['var(--surface2)','var(--text2)']};
+var CO_LBL={geo:'Geometry',bio:'Biology',eng:'Grammar',book:'Book',alg2:'Algebra 2',etc:'기타'};
+
+function coAdd(){
+  var text=document.getElementById('co-text').value.trim();
+  var subj=document.getElementById('co-subj').value;
+  if(!text) return;
+  var item={id:'co_'+Date.now(),title:text,subj:subj};
+  coItems.push(item);
+  // Also carry to next study date
+  coCarryToNext(text, subj);
+  document.getElementById('co-text').value='';
+  coSave(); coRender();
+}
+
+function coDel(id){
+  coItems=coItems.filter(function(x){return x.id!==id;});
+  coSave(); coRender();
+}
+
+function coDoneAdd(title, subj){
+  var now=new Date();
+  var hm=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  // uid로 중복 방지
+  var uid='done_'+title+'_'+subj;
+  coDone=coDone.filter(function(x){return x.uid!==uid;});
+  coDone.unshift({uid:uid, title:title, subj:subj, time:hm});
+  if(coDone.length>30) coDone=coDone.slice(0,30);
+  coSave(); coDoneRefresh();
+}
+
+function coDoneRemove(title, subj){
+  var uid='done_'+title+'_'+subj;
+  coDone=coDone.filter(function(x){return x.uid!==uid;});
+  coSave(); coDoneRefresh();
+}
+
+// 못한 과제를 다음 스터디날 carryover로 저장
+function coCarryToNext(title, subj){
+  var ds=todayStr();
+  var nextDs=null;
+  for(var i=0;i<STUDY_DATES.length;i++){
+    if(STUDY_DATES[i]>ds){nextDs=STUDY_DATES[i];break;}
+  }
+  if(!nextDs) return;
+  try{
+    var key='ssp_carry_'+nextDs;
+    var existing=JSON.parse(localStorage.getItem(key)||'[]');
+    existing.push({id:'carry_'+Date.now(),title:title,subj:subj});
+    localStorage.setItem(key,JSON.stringify(existing));
+  }catch(e){}
+}
+
+// Get carryover tasks for a given date
+function getCarryTasks(ds){
+  try{
+    return JSON.parse(localStorage.getItem('ssp_carry_'+ds)||'[]');
+  }catch(e){return [];}
+}
+function clearCarryTask(ds,id){
+  try{
+    var items=getCarryTasks(ds).filter(function(x){return x.id!==id;});
+    localStorage.setItem('ssp_carry_'+ds,JSON.stringify(items));
+  }catch(e){}
+}
+
+function coDoneRefresh(){
+  var el=document.getElementById('co-done-list');
+  if(!el) return;
+  if(!coDone.length){el.innerHTML='<div class="co-empty">아직 완료된 과제가 없어요</div>';return;}
+  el.innerHTML='';
+  coDone.forEach(function(x){
+    var c=CO_COL[x.subj]||CO_COL.etc;
+    var d=document.createElement('div');d.className='co-done-item';
+    d.style.cssText='display:flex;align-items:center;gap:6px;padding:9px 11px;border-radius:8px;background:var(--surface2);margin-bottom:5px';
+    d.innerHTML='<div class="co-done-item-text" style="flex:1;font-size:12px;text-decoration:line-through;color:var(--text2)">'+x.title+'</div>'
+      +'<span style="font-size:10px;color:var(--text3);flex-shrink:0">'+x.time+'</span>'
+      +'<span class="co-done-tag" style="background:'+c[0]+';color:'+c[1]+';font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;flex-shrink:0">'+CO_LBL[x.subj]+'</span>'
+      +'<button data-uid="'+x.uid+'" data-title="'+x.title+'" data-subj="'+x.subj+'" title="못 한 과제로 이동" style="background:none;border:1px solid var(--border);border-radius:6px;font-size:10px;padding:2px 7px;cursor:pointer;color:var(--text2);flex-shrink:0">↩ 취소</button>';
+    d.querySelector('button').addEventListener('click',function(){
+      var uid=this.getAttribute('data-uid');
+      var title=this.getAttribute('data-title');
+      var subj=this.getAttribute('data-subj');
+      var ds=todayStr();
+      // 완료 목록에서 제거
+      coDone=coDone.filter(function(x){return x.uid!==uid;});
+      coSave(); coDoneRefresh();
+      // state + 타임테이블 done 해제
+      if(!state.tasks[ds]) state.tasks[ds]={};
+      for(var ci=0;ci<ttPlaced.length;ci++){
+        if(ttPlaced[ci].title===title && ttPlaced[ci].subj===subj){
+          ttPlaced[ci].done=false;
+          state.tasks[ds][ttPlaced[ci].id]=false;
+        }
+      }
+      ttSave(); saveState();
+      // 못 한 과제로 추가
+      coItems.push({id:'co_'+Date.now(),title:title,subj:subj});
+      coCarryToNext(title,subj);
+      coSave(); coRender();
+      // 열린 탭 갱신
+      if(document.getElementById('tab-tt').classList.contains('on')) ttDrawBlocks();
+      if(document.getElementById('tab-today').classList.contains('on')) renderToday();
+      renderStats();
+    });
+    el.appendChild(d);
+  });
+}
+
+
+function coRender(){
+  var el=document.getElementById('co-items');
+  if(!el) return;
+  el.innerHTML='';
+  if(!coItems.length){el.innerHTML='<div class="co-empty">못 한 과제를 추가해보세요</div>';return;}
+  coItems.forEach(function(x){
+    var c=CO_COL[x.subj]||CO_COL.etc;
+    var d=document.createElement('div');
+    d.className='co-item';d.setAttribute('draggable','true');
+    d.style.background=c[0];d.style.color=c[1];
+    d.innerHTML='<span class="co-item-text">'+x.title+'</span>'
+      +'<span style="font-size:10px;opacity:.65;flex-shrink:0">'+CO_LBL[x.subj]+'</span>'
+      +'<button class="co-del" data-id="'+x.id+'">✕</button>';
+    d.querySelector('.co-del').addEventListener('click',function(e){
+      e.stopPropagation();coDel(this.getAttribute('data-id'));
+    });
+    // draggable to timetable
+    (function(item){
+      d.addEventListener('dragstart',function(e){
+        ttDrag={id:item.id,title:item.title,subj:item.subj,dur:2};
+        e.dataTransfer.effectAllowed='move';
+      });
+    })(x);
+    el.appendChild(d);
+  });
+}
+
+// Enter key to add
+document.addEventListener('DOMContentLoaded',function(){
+  var inp=document.getElementById('co-text');
+  if(inp) inp.addEventListener('keydown',function(e){if(e.key==='Enter')coAdd();});
+});
+
+function renderCO(){
+  coLoad(); coRender(); coDoneRefresh();
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function updateHdrDate(){
+  var d=new Date(); var ds=todayStr();
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dow=['일','월','화','수','목','금','토'];
+  var el=document.getElementById('hdr-date');
+  if(el) el.textContent=d.getDate()+' '+mo[d.getMonth()]+' ('+dow[d.getDay()]+')';
+  // streak: 연속 완료일
+  var streak=0;
+  var sorted=[...STUDY_DATES].sort().reverse();
+  for(var i=0;i<sorted.length;i++){
+    if(sorted[i]>ds) continue;
+    if(isDayAllDone(sorted[i])) streak++;
+    else break;
+  }
+  var sel=document.getElementById('hdr-streak');
+  if(sel) sel.textContent= streak>0 ? '🔥 '+streak+'일 연속' : '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// FEATURE 1: 누적 순공시간
+// ═══════════════════════════════════════════════════════════
+function calcTotalHours(){
+  var total=0;
+  STUDY_DATES.forEach(function(ds){
+    var dt=DAY_TIMES[ds];
+    if(!dt) return;
+    var tasks=buildTasks(ds).filter(function(t){return !t.isLink&&!t.isCarry;});
+    var done=tasks.filter(function(t){return state.tasks[ds]&&state.tasks[ds][t.id];}).length;
+    var pct=tasks.length?done/tasks.length:0;
+    total+=Math.round((dt.total||0)*pct);
+  });
+  return total;
+}
+function minsToHuman(m){
+  if(m<60) return m+'분';
+  var h=Math.floor(m/60),mn=m%60;
+  return h+'시간'+(mn?' '+mn+'분':'');
+}
+function updateTotalHours(){
+  var total=calcTotalHours();
+  var el=document.getElementById('hdr-hours');
+  if(el) el.textContent=total>0?'총 '+minsToHuman(total)+' 완료':'';
+  var ph=document.getElementById('prog-total-h');
+  var ps=document.getElementById('prog-total-sub');
+  if(ph) ph.textContent=minsToHuman(total)||'0분';
+  if(ps){
+    var pct=STUDY_DATES.length?Math.round(total/(STUDY_DATES.length*300)*100):0;
+    if(total===0) ps.textContent='방학 목표를 향해 달려가자!';
+    else if(pct>=100) ps.textContent='🏆 목표 달성! 정말 대단해요!';
+    else if(pct>=75) ps.textContent='🔥 거의 다 왔어요! '+pct+'% 달성';
+    else if(pct>=50) ps.textContent='💪 절반 넘었어요! '+pct+'% 달성';
+    else ps.textContent='🌱 꾸준히 가고 있어요! '+pct+'% 달성';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// FEATURE 2: 주간 달성률 배지
+// ═══════════════════════════════════════════════════════════
+function calcWeekRate(ds){
+  var week=null;
+  for(var i=0;i<WEEKS.length;i++){
+    if(WEEKS[i].days.indexOf(ds)>=0){week=WEEKS[i];break;}
+  }
+  if(!week) return null;
+  var total=0,done=0;
+  week.days.forEach(function(d){
+    var tasks=buildTasks(d).filter(function(t){return !t.isLink&&!t.isCarry;});
+    total+=tasks.length;
+    done+=tasks.filter(function(t){return state.tasks[d]&&state.tasks[d][t.id];}).length;
+  });
+  return total>0?{done:done,total:total,pct:Math.round(done/total*100),label:week.label}:null;
+}
+function renderWeekBadge(){
+  var wrap=document.getElementById('week-badge-wrap');
+  if(!wrap) return;
+  var ds=todayStr();
+  if(!isStudyDate(ds)){wrap.innerHTML='';return;}
+  var r=calcWeekRate(ds);
+  if(!r){wrap.innerHTML='';return;}
+  var icon,cls,msg;
+  if(r.pct===100){icon='🏆';cls='gold';msg='이번 주 완벽 달성!';}
+  else if(r.pct>=80){icon='⭐';cls='gold';msg='이번 주 목표 달성!';}
+  else if(r.pct>=50){icon='💪';cls='silver';msg='절반 이상 완료!';}
+  else{icon='🌱';cls='';msg='오늘도 한 걸음씩!';}
+  wrap.innerHTML='<div class="week-badge '+cls+'">'
+    +'<div class="week-badge-icon">'+icon+'</div>'
+    +'<div class="week-badge-info">'
+    +'<div class="week-badge-title">'+msg+'</div>'
+    +'<div class="week-badge-sub">'+r.label+' &middot; '+r.done+'/'+r.total+' 완료</div>'
+    +'</div>'
+    +'<div class="week-badge-pct">'+r.pct+'%</div>'
+    +'</div>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// FEATURE 3: 챕터 완료 축하 (토스트 + 컨페티)
+// ═══════════════════════════════════════════════════════════
+function showChToast(msg){
+  var t=document.getElementById('ch-toast');
+  if(!t) return;
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
+function launchConfetti(){
+  var colors=['#4A3F8F','#1B6B4A','#C4832A','#8A2A1A','#1A5276','#F4C430'];
+  for(var i=0;i<20;i++){
+    (function(n){
+      setTimeout(function(){
+        var el=document.createElement('div');
+        el.className='confetti-piece';
+        el.style.left=Math.random()*100+'vw';
+        el.style.top='65px';
+        el.style.background=colors[Math.floor(Math.random()*colors.length)];
+        el.style.animationDelay=(Math.random()*0.2)+'s';
+        el.style.borderRadius=Math.random()>0.5?'50%':'2px';
+        document.body.appendChild(el);
+        setTimeout(function(){if(el.parentNode)el.remove();},1000);
+      },n*35);
+    })(i);
+  }
+}
+function toggleCh(key,idx){
+  if(!state.chapters[key]) state.chapters[key]={};
+  var wasOn=!!state.chapters[key][idx];
+  state.chapters[key][idx]=!wasOn;
+  saveState();
+  if(!wasOn&&state.chapters[key][idx]){
+    var ch=SUBJECTS[key]&&SUBJECTS[key].chapters[idx]?SUBJECTS[key].chapters[idx]:'챕터';
+    showChToast('🎉 '+ch+' 완료!');
+    launchConfetti();
+  }
+  renderProg(); renderStats(); updateTotalHours();
+}
+
+// ═══════════════════════════════════════════════════════════
+// FEATURE 4: 엄마 코멘트
+// ═══════════════════════════════════════════════════════════
+function loadMomComment(ds){
+  try{return JSON.parse(localStorage.getItem('ssp_mom_'+ds)||'null');}catch(e){return null;}
+}
+function saveMomComment(){
+  var ds=todayStr();
+  var text=document.getElementById('mom-textarea').value.trim();
+  if(!text) return;
+  var obj={text:text,time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})};
+  localStorage.setItem('ssp_mom_'+ds,JSON.stringify(obj));
+  fbSaveMom(ds, obj);
+  renderMomComment(ds);
+  showChToast('💌 코멘트가 저장됐어요!');
+}
+function renderMomComment(ds){
+  var view=document.getElementById('mom-comment-view');
+  var textEl=document.getElementById('mom-comment-text');
+  var timeEl=document.getElementById('mom-comment-time');
+  var ta=document.getElementById('mom-textarea');
+  if(!view) return;
+  fbLoadMom(ds, function(data){
+    if(data&&data.text){
+      view.style.display='block';
+      if(textEl) textEl.textContent=data.text;
+      if(timeEl) timeEl.textContent=data.time||'';
+      if(ta) ta.value=data.text;
+    } else {
+      view.style.display='none';
+      if(ta) ta.value='';
+    }
+  });
+}
+
+coLoad();
+fbLoad(function() {
+  renderToday();
+  renderStats();
+  updateHdrDate();
+  updateTotalHours();
+  renderWeekBadge();
+});
+</script>
+</body>
+</html>
